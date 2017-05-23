@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Assets.Scripts {
 
+	[UsedImplicitly]
 	internal sealed class Tile : MonoBehaviour {
 
 		public int Y { get; private set; }
@@ -21,7 +23,7 @@ namespace Assets.Scripts {
 		public Transform SpriteTransform { get; private set; }
 		public Vector3 SpritePosition { get; private set; }
 
-		public Tile Initialize (GameObject go, int y, int x, Element type) {
+		public void Initialize (GameObject go, int y, int x, Element type) {
 			Y = y;
 			X = x;
 			Type = type;
@@ -37,8 +39,6 @@ namespace Assets.Scripts {
 			SpriteTransform = Transform.Find("Sprite");
 			SpriteGO = SpriteTransform.gameObject;
 			SpritePosition = SpriteTransform.localPosition;
-
-			return this;
 		}
 
 	}

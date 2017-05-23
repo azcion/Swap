@@ -2,11 +2,11 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class Animation {
+	internal sealed class AnimatePosition {
 
 		public bool Active;
 
-		private const float Speed = 15f;
+		private const float Speed = 10f;
 
 		private readonly Transform _item;
 		private readonly Vector2 _start;
@@ -15,7 +15,7 @@ namespace Assets.Scripts {
 		private float _startTime;
 		private float _duration;
 
-		public Animation (Transform item, Vector2 start, Vector2 end) {
+		public AnimatePosition (Transform item, Vector2 start, Vector2 end) {
 			_item = item;
 			_start = start;
 			_end = end;
@@ -33,10 +33,10 @@ namespace Assets.Scripts {
 			}
 
 			float covered = (Time.time - _startTime) * Speed;
-			float fracDist = covered / _duration;
-			_item.position = Vector2.Lerp(_start, _end, fracDist);
+			float frac = covered / _duration;
+			_item.position = Vector2.Lerp(_start, _end, frac);
 
-			if (fracDist >= 1) {
+			if (frac >= 1) {
 				Active = false;
 			}
 		}

@@ -61,6 +61,7 @@ namespace Assets.Scripts {
 			_sprite.localPosition = Z.VTileSprite;
 			_parent.position = Interpolate(_parent.position);
 
+			FieldGenerator.Check();
 		}
 
 		[UsedImplicitly]

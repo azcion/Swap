@@ -15,10 +15,16 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 
 		private static List<List<Tile>> _tiles;
-		private static List<Animation> _animations;
+		private static List<List<bool>> _matched;
+
+		private static List<AnimatePosition> _positionAnimations;
+		private static List<AnimateRotation> _rotationAnimations;
+		private static List<AnimateScale> _scaleAnimations;
+
+		private static int _animationsPending;
 
 		private List<GameObject> _tilePrefabs;
-
+		
 		/// <summary>
 		/// Move overlapped tile position to empty spot
 		/// </summary>
@@ -30,23 +36,49 @@ namespace Assets.Scripts {
 
 			Tile holdTile = _tiles[y0][x0];
 
-			Animation a = new Animation(holdTile.GO.transform, tile, empty);
+			AnimatePosition a = new AnimatePosition(holdTile.Transform, tile, empty);
 			a.Start();
-			_animations.Add(a);
+			_positionAnimations.Add(a);
+			++_animationsPending;
 
 			_tiles[y0][x0] = _tiles[y1][x1];
 			_tiles[y1][x1] = holdTile;
 		}
 
-		public void Check () {
-			Match.Check(_tiles);
+		/// <summary>
+		/// Call the static function Match.Check and pass it an instance of the grid
+		/// </summary>
+		public static void Check () {
+			_matched = Match.Check(ref _tiles);
+		}
+
+		public void Pop () {
+			for (int y = 0; y < Height; ++y) {
+				for (int x = 0; x < Width; ++x) {
+					if (!_matched[y][x]) {
+						continue;
+					}
+
+					AnimateRotation aRot = new AnimateRotation(_tiles[y][x].Transform, .2f);
+					aRot.Start();
+					_rotationAnimations.Add(aRot);
+					++_animationsPending;
+
+					AnimateScale aScale = new AnimateScale(_tiles[y][x].Transform, new Vector3(.5f, .5f, 0), .2f);
+					aScale.Start();
+					_scaleAnimations.Add(aScale);
+					++_animationsPending;
+				}
+			}
 		}
 
 		[UsedImplicitly]
 		private void OnEnable () {
 			_tilePrefabs = new List<GameObject>();
 			_tiles = new List<List<Tile>>();
-			_animations = new List<Animation>();
+			_positionAnimations = new List<AnimatePosition>();
+			_rotationAnimations = new List<AnimateRotation>();
+			_scaleAnimations = new List<AnimateScale>();
 
 			foreach (string element in Enum.GetNames(typeof(Element))) {
 				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
@@ -85,12 +117,44 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void Update () {
-			for (int i = 0; i < _animations.Count; ++i) {
-				Animation a = _animations[i];
+			if (_animationsPending < 1) {
+				return;
+			}
+
+			for (int i = 0; i < _positionAnimations.Count; ++i) {
+				AnimatePosition a = _positionAnimations[i];
 
 				if (!a.Active) {
-					_animations.RemoveAt(i);
-					return;
+					_positionAnimations.RemoveAt(i);
+					--_animationsPending;
+
+					break;
+				}
+
+				a.Update();
+			}
+
+			for (int i = 0; i < _rotationAnimations.Count; ++i) {
+				AnimateRotation a = _rotationAnimations[i];
+
+				if (!a.Active) {
+					_rotationAnimations.RemoveAt(i);
+					--_animationsPending;
+
+					break;
+				}
+
+				a.Update();
+			}
+
+			for (int i = 0; i < _scaleAnimations.Count; ++i) {
+				AnimateScale a = _scaleAnimations[i];
+
+				if (!a.Active) {
+					_scaleAnimations.RemoveAt(i);
+					--_animationsPending;
+
+					break;
 				}
 
 				a.Update();
