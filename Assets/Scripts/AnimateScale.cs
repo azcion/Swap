@@ -2,24 +2,22 @@
 
 namespace Assets.Scripts {
 
-	public class AnimateScale {
+	internal sealed class AnimateScale {
 
 		public bool Active;
 
-		private const float Speed = 10f;
+		private const float Duration = .2f;
 
-		private readonly Transform _item;
+		private static readonly Vector3 End = new Vector3(.5f, .5f, 1);
+
+		private readonly Transform _tile;
 		private readonly Vector3 _start;
-		private readonly Vector3 _scale;
-		private readonly float _duration;
 
 		private float _startTime;
 
-		public AnimateScale (Transform item, Vector3 scale, float duration) {
-			_item = item;
-			_start = item.transform.localScale;
-			_scale = scale;
-			_duration = duration;
+		public AnimateScale (Transform tile) {
+			_tile = tile;
+			_start = tile.transform.localScale;
 		}
 
 		public void Start () {
@@ -33,8 +31,11 @@ namespace Assets.Scripts {
 			}
 
 			float covered = Time.time - _startTime;
-			float frac = covered / _duration;
-			_item.localScale = Vector3.Lerp(_start, _scale, frac);
+			float frac = covered / Duration;
+			_tile.localScale = new Vector3(
+				Mathf.SmoothStep(_start.x, End.x, frac),
+				Mathf.SmoothStep(_start.y, End.y, frac),
+				1);
 
 			if (frac >= 1) {
 				Active = false;

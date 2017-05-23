@@ -6,21 +6,18 @@ namespace Assets.Scripts {
 
 		public bool Active;
 
-		private const float Speed = 15f;
+		private const float Duration = .2f;
 
-		private readonly Transform _item;
-		private readonly float _duration;
+		private readonly Transform _tile;
 
-		private float _startTime;
+		private float _frac;
 
-		public AnimateRotation (Transform item, float duration) {
-			_item = item;
-			_duration = duration;
+		public AnimateRotation (Transform tile) {
+			_tile = tile;
 		}
 
 		public void Start () {
 			Active = true;
-			_startTime = Time.time;
 		}
 
 		public void Update () {
@@ -28,17 +25,12 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			float covered = Time.time - _startTime;
-			float frac = covered / _duration;
-			_item.Rotate(Vector3.back * Speed);
+			_frac += Time.deltaTime / Duration;
+			_tile.rotation = Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 360, _frac));
 
-			if (frac >= 1) {
+			if (_frac >= 1) {
 				Active = false;
 			}
-		}
-
-		public Transform GetTransform () {
-			return _item;
 		}
 
 	}

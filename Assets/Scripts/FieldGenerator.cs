@@ -59,12 +59,12 @@ namespace Assets.Scripts {
 						continue;
 					}
 
-					AnimateRotation aRot = new AnimateRotation(_tiles[y][x].Transform, .2f);
+					AnimateRotation aRot = new AnimateRotation(_tiles[y][x].Transform);
 					aRot.Start();
 					_rotationAnimations.Add(aRot);
 					++_animationsPending;
 
-					AnimateScale aScale = new AnimateScale(_tiles[y][x].Transform, new Vector3(.5f, .5f, 0), .2f);
+					AnimateScale aScale = new AnimateScale(_tiles[y][x].Transform);
 					aScale.Start();
 					_scaleAnimations.Add(aScale);
 					++_animationsPending;

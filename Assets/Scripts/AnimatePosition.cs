@@ -6,37 +6,36 @@ namespace Assets.Scripts {
 
 		public bool Active;
 
-		private const float Speed = 10f;
+		private const float Duration = .2f;
 
-		private readonly Transform _item;
+		private readonly Transform _tile;
 		private readonly Vector2 _start;
 		private readonly Vector2 _end;
 
 		private float _startTime;
-		private float _duration;
+		private float _frac;
 
-		public AnimatePosition (Transform item, Vector2 start, Vector2 end) {
-			_item = item;
+		public AnimatePosition (Transform tile, Vector2 start, Vector2 end) {
+			_tile = tile;
 			_start = start;
 			_end = end;
 		}
 
 		public void Start () {
 			Active = true;
-			_startTime = Time.time;
-			_duration = Vector2.Distance(_start, _end);
-		}
+			_startTime = Time.time;		}
 
 		public void Update () {
 			if (!Active) {
 				return;
 			}
 
-			float covered = (Time.time - _startTime) * Speed;
-			float frac = covered / _duration;
-			_item.position = Vector2.Lerp(_start, _end, frac);
+			_frac += Duration - (Time.time - _startTime);
+			_tile.position = new Vector2(
+				Mathf.SmoothStep(_start.x, _end.x, _frac),
+				Mathf.SmoothStep(_start.y, _end.y, _frac));
 
-			if (frac >= 1) {
+			if (_frac >= 1) {
 				Active = false;
 			}
 		}
