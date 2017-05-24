@@ -28,16 +28,15 @@ namespace Assets.Scripts {
 		/// <summary>
 		/// Move overlapped tile position to empty spot
 		/// </summary>
-		public static void Swap (Vector2 tile, Vector2 empty) {
-			int x0 = (int) tile.x - 1;
-			int y0 = (int) tile.y - 1;
-			int x1 = (int) empty.x - 1;
-			int y1 = (int) empty.y - 1;
+		public static void Swap (Vector2 start, Vector2 end) {
+			int x0 = (int) start.x - 1;
+			int y0 = (int) start.y - 1;
+			int x1 = (int) end.x - 1;
+			int y1 = (int) end.y - 1;
 
 			Tile holdTile = _tiles[y0][x0];
 
-			AnimatePosition a = new AnimatePosition(holdTile.Transform, tile, empty);
-			a.Start();
+			AnimatePosition a = new AnimatePosition(holdTile, start, end);
 			_positionAnimations.Add(a);
 			++_animationsPending;
 
@@ -59,13 +58,13 @@ namespace Assets.Scripts {
 						continue;
 					}
 
-					AnimateRotation aRot = new AnimateRotation(_tiles[y][x].Transform);
-					aRot.Start();
-					_rotationAnimations.Add(aRot);
+					Tile t = _tiles[y][x];
+
+					AnimateRotation aRotation = new AnimateRotation(t);
+					_rotationAnimations.Add(aRotation);
 					++_animationsPending;
 
-					AnimateScale aScale = new AnimateScale(_tiles[y][x].Transform);
-					aScale.Start();
+					AnimateScale aScale = new AnimateScale(t);
 					_scaleAnimations.Add(aScale);
 					++_animationsPending;
 				}

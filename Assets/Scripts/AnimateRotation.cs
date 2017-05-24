@@ -2,33 +2,22 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class AnimateRotation {
+	internal sealed class AnimateRotation : Animate {
 
-		public bool Active;
-
-		private const float Duration = .2f;
-
-		private readonly Transform _tile;
-
-		private float _frac;
-
-		public AnimateRotation (Transform tile) {
-			_tile = tile;
-		}
-
-		public void Start () {
+		public AnimateRotation (Tile tile) {
 			Active = true;
+			Tile = tile;
 		}
 
-		public void Update () {
+		public override void Update () {
 			if (!Active) {
 				return;
 			}
 
-			_frac += Time.deltaTime / Duration;
-			_tile.rotation = Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 360, _frac));
+			Fraction += Time.deltaTime / DurationMedium;
+			Tile.Transform.rotation = Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 360, Fraction));
 
-			if (_frac >= 1) {
+			if (Fraction >= 1) {
 				Active = false;
 			}
 		}
