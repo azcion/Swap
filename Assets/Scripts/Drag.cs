@@ -98,7 +98,17 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			FieldGenerator.Swap(_hoverOverPos, _initialPos);
+			// If diagonal movement was made without registering corner tiles
+			if ((int) _hoverOverPos.x != (int) _initialPos.x && (int) _hoverOverPos.y != (int) _initialPos.y) {
+				// Skipped tile
+				FieldGenerator.Swap(new Vector2(_initialPos.x, _hoverOverPos.y), _initialPos);
+
+				// Tile diagonal to the empty spot
+				FieldGenerator.Swap(_hoverOverPos, new Vector2(_initialPos.x, _hoverOverPos.y));
+			} else {
+				FieldGenerator.Swap(_hoverOverPos, _initialPos);
+			}
+
 			_initialPos = _hoverOverPos;
 		}
 
