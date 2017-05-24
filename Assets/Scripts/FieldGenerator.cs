@@ -20,6 +20,7 @@ namespace Assets.Scripts {
 		private static List<AnimatePosition> _positionAnimations;
 		private static List<AnimateRotation> _rotationAnimations;
 		private static List<AnimateScale> _scaleAnimations;
+		private static List<AnimateOpacity> _opacityAnimations;
 
 		private static int _animationsPending;
 
@@ -67,6 +68,10 @@ namespace Assets.Scripts {
 					AnimateScale aScale = new AnimateScale(t);
 					_scaleAnimations.Add(aScale);
 					++_animationsPending;
+
+					AnimateOpacity aOpacity = new AnimateOpacity(t);
+					_opacityAnimations.Add(aOpacity);
+					++_animationsPending;
 				}
 			}
 		}
@@ -78,6 +83,7 @@ namespace Assets.Scripts {
 			_positionAnimations = new List<AnimatePosition>();
 			_rotationAnimations = new List<AnimateRotation>();
 			_scaleAnimations = new List<AnimateScale>();
+			_opacityAnimations = new List<AnimateOpacity>();
 
 			foreach (string element in Enum.GetNames(typeof(Element))) {
 				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
@@ -151,6 +157,19 @@ namespace Assets.Scripts {
 
 				if (!a.Active) {
 					_scaleAnimations.RemoveAt(i);
+					--_animationsPending;
+
+					break;
+				}
+
+				a.Update();
+			}
+
+			for (int i = 0; i < _opacityAnimations.Count; ++i) {
+				AnimateOpacity a = _opacityAnimations[i];
+
+				if (!a.Active) {
+					_opacityAnimations.RemoveAt(i);
 					--_animationsPending;
 
 					break;
