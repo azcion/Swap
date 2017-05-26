@@ -16,11 +16,7 @@ namespace Assets.Scripts {
 
 		private static List<List<Tile>> _tiles;
 		private static List<List<bool>> _matched;
-
-		private static List<AnimatePosition> _positionAnimations;
-		private static List<AnimateRotation> _rotationAnimations;
-		private static List<AnimateScale> _scaleAnimations;
-		private static List<AnimateOpacity> _opacityAnimations;
+		private static List<IAnimate> _animations;
 
 		private static int _animationsPending;
 
@@ -37,8 +33,8 @@ namespace Assets.Scripts {
 
 			Tile holdTile = _tiles[y0][x0];
 
-			AnimatePosition a = new AnimatePosition(holdTile, start, end);
-			_positionAnimations.Add(a);
+			IAnimate a = new AnimatePosition(holdTile, start, end);
+			_animations.Add(a);
 			++_animationsPending;
 
 			_tiles[y0][x0] = _tiles[y1][x1];
@@ -52,7 +48,10 @@ namespace Assets.Scripts {
 			_matched = Match.Check(ref _tiles);
 		}
 
-		public void Pop () {
+		/// <summary>
+		/// Add removal animations of matched tiles
+		/// </summary>
+		public static void Pop () {
 			for (int y = 0; y < Height; ++y) {
 				for (int x = 0; x < Width; ++x) {
 					if (!_matched[y][x]) {
@@ -61,29 +60,43 @@ namespace Assets.Scripts {
 
 					Tile t = _tiles[y][x];
 
-					AnimateRotation aRotation = new AnimateRotation(t);
-					_rotationAnimations.Add(aRotation);
-					++_animationsPending;
-
-					AnimateScale aScale = new AnimateScale(t);
-					_scaleAnimations.Add(aScale);
-					++_animationsPending;
-
-					AnimateOpacity aOpacity = new AnimateOpacity(t);
-					_opacityAnimations.Add(aOpacity);
-					++_animationsPending;
+					_animations.Add(new AnimateRotation(t));
+					_animations.Add(new AnimateScale(t));
+					_animations.Add(new AnimateOpacity(t));
+					_animationsPending += 3;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Call Update methods of animations and remove them if needed
+		/// </summary>
+		private static void Animate (IList<IAnimate> animations) {
+			List<int> indexesToRemove = new List<int>();
+
+			for (int i = 0; i < animations.Count; ++i) {
+				IAnimate a = animations[i];
+
+				if (!a.IsActive()) {
+					indexesToRemove.Add(i);
+					continue;
+				}
+
+				a.Update();
+			}
+
+			for (int i = 0; i < indexesToRemove.Count; ++i) {
+				animations.RemoveAt(indexesToRemove[i] - i);
+			}
+
+			_animationsPending -= indexesToRemove.Count;
 		}
 
 		[UsedImplicitly]
 		private void OnEnable () {
 			_tilePrefabs = new List<GameObject>();
 			_tiles = new List<List<Tile>>();
-			_positionAnimations = new List<AnimatePosition>();
-			_rotationAnimations = new List<AnimateRotation>();
-			_scaleAnimations = new List<AnimateScale>();
-			_opacityAnimations = new List<AnimateOpacity>();
+			_animations = new List<IAnimate>();
 
 			foreach (string element in Enum.GetNames(typeof(Element))) {
 				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
@@ -126,57 +139,7 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			for (int i = 0; i < _positionAnimations.Count; ++i) {
-				AnimatePosition a = _positionAnimations[i];
-
-				if (!a.Active) {
-					_positionAnimations.RemoveAt(i);
-					--_animationsPending;
-
-					break;
-				}
-
-				a.Update();
-			}
-
-			for (int i = 0; i < _rotationAnimations.Count; ++i) {
-				AnimateRotation a = _rotationAnimations[i];
-
-				if (!a.Active) {
-					_rotationAnimations.RemoveAt(i);
-					--_animationsPending;
-
-					break;
-				}
-
-				a.Update();
-			}
-
-			for (int i = 0; i < _scaleAnimations.Count; ++i) {
-				AnimateScale a = _scaleAnimations[i];
-
-				if (!a.Active) {
-					_scaleAnimations.RemoveAt(i);
-					--_animationsPending;
-
-					break;
-				}
-
-				a.Update();
-			}
-
-			for (int i = 0; i < _opacityAnimations.Count; ++i) {
-				AnimateOpacity a = _opacityAnimations[i];
-
-				if (!a.Active) {
-					_opacityAnimations.RemoveAt(i);
-					--_animationsPending;
-
-					break;
-				}
-
-				a.Update();
-			}
+			Animate(_animations);
 		}
 
 	}

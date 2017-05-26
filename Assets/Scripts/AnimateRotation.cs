@@ -2,14 +2,18 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class AnimateRotation : Animate {
+	internal sealed class AnimateRotation : Animate, IAnimate {
 
 		public AnimateRotation (Tile tile) {
 			Active = true;
 			Tile = tile;
 		}
 
-		public override void Update () {
+		public bool IsActive () {
+			return Active;
+		}
+
+		public void Update () {
 			if (!Active) {
 				return;
 			}

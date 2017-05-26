@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class AnimatePosition : Animate {
+	internal sealed class AnimatePosition : Animate, IAnimate {
 
 		public AnimatePosition (Tile tile, Vector2 start, Vector2 end) {
 			Active = true;
@@ -12,7 +12,11 @@ namespace Assets.Scripts {
 			StartTime = Time.time;
 		}
 
-		public override void Update () {
+		public bool IsActive () {
+			return Active;
+		}
+
+		public void Update () {
 			if (!Active) {
 				return;
 			}

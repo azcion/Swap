@@ -62,6 +62,7 @@ namespace Assets.Scripts {
 			_parent.position = Interpolate(_parent.position);
 
 			FieldGenerator.Check();
+			FieldGenerator.Pop();
 		}
 
 		[UsedImplicitly]

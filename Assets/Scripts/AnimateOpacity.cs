@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class AnimateOpacity : Animate {
+	internal sealed class AnimateOpacity : Animate, IAnimate {
 
 		private readonly SpriteRenderer _sprite;
 
@@ -13,7 +13,12 @@ namespace Assets.Scripts {
 			StartTime = Time.time;
 		}
 
-		public override void Update () {
+
+		public bool IsActive () {
+			return Active;
+		}
+
+		public void Update () {
 			if (!Active) {
 				return;
 			}

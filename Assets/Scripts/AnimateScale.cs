@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts {
 
-	internal sealed class AnimateScale : Animate {
+	internal sealed class AnimateScale : Animate, IAnimate {
 
 		public AnimateScale (Tile tile) {
 			Active = true;
@@ -12,7 +12,11 @@ namespace Assets.Scripts {
 			StartTime = Time.time;
 		}
 
-		public override void Update () {
+		public bool IsActive () {
+			return Active;
+		}
+
+		public void Update () {
 			if (!Active) {
 				return;
 			}
