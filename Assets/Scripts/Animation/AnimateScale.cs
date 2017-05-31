@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts {
+namespace Assets.Scripts.Animation {
 
-	internal sealed class AnimateScale : Animate, IAnimate {
+	internal sealed class AnimateScale : AbstractAnimation, IAnimate {
 
 		public AnimateScale (Tile tile) {
 			Active = true;

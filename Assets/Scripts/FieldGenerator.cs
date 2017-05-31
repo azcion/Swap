@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Animation;
 using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,9 +17,6 @@ namespace Assets.Scripts {
 
 		private static List<List<Tile>> _tiles;
 		private static List<List<bool>> _matched;
-		private static List<IAnimate> _animations;
-
-		private static int _animationsPending;
 
 		private List<GameObject> _tilePrefabs;
 		
@@ -33,10 +31,8 @@ namespace Assets.Scripts {
 
 			Tile holdTile = _tiles[y0][x0];
 
-			IAnimate a = new AnimatePosition(holdTile, start, end);
-			_animations.Add(a);
-			++_animationsPending;
-
+			Animate.Add(new AnimatePosition(holdTile, start, end));
+			
 			_tiles[y0][x0] = _tiles[y1][x1];
 			_tiles[y1][x1] = holdTile;
 		}
@@ -46,57 +42,13 @@ namespace Assets.Scripts {
 		/// </summary>
 		public static void Check () {
 			_matched = Match.Check(ref _tiles);
-		}
-
-		/// <summary>
-		/// Add removal animations of matched tiles
-		/// </summary>
-		public static void Pop () {
-			for (int y = 0; y < Height; ++y) {
-				for (int x = 0; x < Width; ++x) {
-					if (!_matched[y][x]) {
-						continue;
-					}
-
-					Tile t = _tiles[y][x];
-
-					_animations.Add(new AnimateRotation(t));
-					_animations.Add(new AnimateScale(t));
-					_animations.Add(new AnimateOpacity(t));
-					_animationsPending += 3;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Call Update methods of animations and remove them if needed
-		/// </summary>
-		private static void Animate (IList<IAnimate> animations) {
-			List<int> indexesToRemove = new List<int>();
-
-			for (int i = 0; i < animations.Count; ++i) {
-				IAnimate a = animations[i];
-
-				if (!a.IsActive()) {
-					indexesToRemove.Add(i);
-					continue;
-				}
-
-				a.Update();
-			}
-
-			for (int i = 0; i < indexesToRemove.Count; ++i) {
-				animations.RemoveAt(indexesToRemove[i] - i);
-			}
-
-			_animationsPending -= indexesToRemove.Count;
+			Animate.Pop(_tiles, _matched);
 		}
 
 		[UsedImplicitly]
 		private void OnEnable () {
 			_tilePrefabs = new List<GameObject>();
 			_tiles = new List<List<Tile>>();
-			_animations = new List<IAnimate>();
 
 			foreach (string element in Enum.GetNames(typeof(Element))) {
 				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
@@ -135,11 +87,7 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void Update () {
-			if (_animationsPending < 1) {
-				return;
-			}
-
-			Animate(_animations);
+			Animate.Update();
 		}
 
 	}

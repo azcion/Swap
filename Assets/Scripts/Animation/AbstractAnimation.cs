@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts {
+namespace Assets.Scripts.Animation {
 
-	internal abstract class Animate {
+	internal abstract class AbstractAnimation {
 
 		protected const float DurationShort = .2f;
 		protected const float DurationMedium = .4f;

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts {
+namespace Assets.Scripts.Animation {
 
-	internal sealed class AnimatePosition : Animate, IAnimate {
+	internal sealed class AnimatePosition : AbstractAnimation, IAnimate {
 
 		public AnimatePosition (Tile tile, Vector2 start, Vector2 end) {
 			Active = true;

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts {
+namespace Assets.Scripts.Animation {
 
-	internal sealed class AnimateOpacity : Animate, IAnimate {
+	internal sealed class AnimateOpacity : AbstractAnimation, IAnimate {
 
 		private readonly SpriteRenderer _sprite;
 

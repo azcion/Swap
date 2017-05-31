@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts {
+namespace Assets.Scripts.Animation {
 
-	internal sealed class AnimateRotation : Animate, IAnimate {
+	internal sealed class AnimateRotation : AbstractAnimation, IAnimate {
 
 		public AnimateRotation (Tile tile) {
 			Active = true;
