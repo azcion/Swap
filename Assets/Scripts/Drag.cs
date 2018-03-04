@@ -21,7 +21,6 @@ namespace Assets.Scripts {
 		private GameObject _selectedOverlay;
 		private Transform _sprite;
 
-		private Vector3 _offset;
 		private Vector3 _initialPos;
 		private Vector3 _hoverOverPos;
 
@@ -49,7 +48,6 @@ namespace Assets.Scripts {
 			// Bring to front to prevent from being overlapped
 			_sprite.localPosition = Z.VSelectedTileSprite;
 			_selectedOverlay.SetActive(true);
-			_offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			_initialPos = Interpolate(_parent.position);
 			_hoverOverPos = _initialPos;
 		}
@@ -73,7 +71,7 @@ namespace Assets.Scripts {
 			}
 
 			_mOld = m;
-			m = Camera.main.ScreenToWorldPoint(m) + _offset;
+			m = Camera.main.ScreenToWorldPoint(m);
 
 			float x = m.x;
 			float y = m.y;

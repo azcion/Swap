@@ -79,3 +79,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/.vs/Swap/v15/Server/sqlite3

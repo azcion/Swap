@@ -16,7 +16,6 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 
 		private static List<List<Tile>> _tiles;
-		private static List<List<bool>> _matched;
 
 		private List<GameObject> _tilePrefabs;
 		
@@ -41,8 +40,8 @@ namespace Assets.Scripts {
 		/// Call the static function Match.Check and pass it an instance of the grid
 		/// </summary>
 		public static void Check () {
-			_matched = Match.Check(ref _tiles);
-			Animate.Pop(_tiles, _matched);
+			List<List<Element>> matched = Match.Check(ref _tiles);
+			Animate.Pop(_tiles, matched);
 		}
 
 		[UsedImplicitly]

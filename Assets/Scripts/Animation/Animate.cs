@@ -23,10 +23,10 @@ namespace Assets.Scripts.Animation {
 		/// <summary>
 		/// Add removal animations of matched tiles
 		/// </summary>
-		public static void Pop (List<List<Tile>> tiles, List<List<bool>> matched) {
+		public static void Pop (List<List<Tile>> tiles, List<List<Element>> matched) {
 			for (int y = 0; y < tiles.Count; ++y) {
 				for (int x = 0; x < tiles[0].Count; ++x) {
-					if (!matched[y][x]) {
+					if (matched[y][x] == 0) {
 						continue;
 					}
 

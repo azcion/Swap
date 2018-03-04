@@ -6,18 +6,18 @@ namespace Assets.Scripts {
 
 	internal static class Match {
 
-		private static List<List<bool>> _toDestroy;
+		private static List<List<Element>> _toDestroy;
 
 		private static readonly Text T = GameObject.Find("Text").transform.GetComponent<Text>();
 
 		/// <summary>
 		/// Check the field for matches of 3 or more and mark them for destruction
 		/// </summary>
-		public static List<List<bool>> Check (ref List<List<Tile>> field) {
-			_toDestroy = new List<List<bool>>();
+		public static List<List<Element>> Check (ref List<List<Tile>> field) {
+			_toDestroy = new List<List<Element>>();
 
 			for (int y = 0; y < FieldGenerator.Height; ++y) {
-				_toDestroy.Add(new List<bool>(new bool[FieldGenerator.Width]));
+				_toDestroy.Add(new List<Element>(new Element[FieldGenerator.Width]));
 			}
 
 			FindHorizontal(field);
@@ -31,11 +31,11 @@ namespace Assets.Scripts {
 		private static void Debug () {
 			T.text = Time.timeSinceLevelLoad + "";
 
-			foreach (List<bool> row in _toDestroy) {
+			foreach (List<Element> row in _toDestroy) {
 				string line = "";
 
-				foreach (bool b in row) {
-					line += b ? "1  " : "0  ";
+				foreach (Element e in row) {
+					line += (int) e + " ";
 				}
 
 				T.text = line + "\n" + T.text;
@@ -56,13 +56,13 @@ namespace Assets.Scripts {
 
 						if (matches > 2 && x == row.Count - 1) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y][x - i] = true;
+								_toDestroy[y][x - i] = e;
 							}
 						}
 					} else {
 						if (matches > 2) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y][x - 1 - i] = true;
+								_toDestroy[y][x - 1 - i] = e;
 							}
 						}
 
@@ -86,13 +86,13 @@ namespace Assets.Scripts {
 
 						if (matches > 2 && y == field.Count - 1) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y - i][x] = true;
+								_toDestroy[y - i][x] = e;
 							}
 						}
 					} else {
 						if (matches > 2) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y - 1 - i][x] = true;
+								_toDestroy[y - 1 - i][x] = e;
 							}
 						}
 
