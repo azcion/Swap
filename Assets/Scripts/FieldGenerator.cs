@@ -44,6 +44,14 @@ namespace Assets.Scripts {
 			Animate.Pop(_tiles, matched);
 		}
 
+		/// <summary>
+		/// Call the static function FieldGenerator.Check on button press
+		/// </summary>
+		[UsedImplicitly]
+		public void CheckOnClick () {
+			Check();
+		}
+
 		[UsedImplicitly]
 		private void OnEnable () {
 			_tilePrefabs = new List<GameObject>();
