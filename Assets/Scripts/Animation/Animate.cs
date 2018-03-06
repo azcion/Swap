@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Animation {
 
@@ -32,6 +33,7 @@ namespace Assets.Scripts.Animation {
 
 					Tile t = tiles[y][x];
 
+					Add(new AnimatePosition(t, Vector2.down, Duration.Medium));
 					Add(new AnimateRotation(t));
 					Add(new AnimateScale(t));
 					Add(new AnimateOpacity(t));

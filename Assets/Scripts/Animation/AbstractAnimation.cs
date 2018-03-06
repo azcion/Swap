@@ -14,6 +14,7 @@ namespace Assets.Scripts.Animation {
 		protected float Fraction;
 		protected Vector3 Start;
 		protected Vector3 End;
+		protected float DurationOverride;
 
 	}
 
