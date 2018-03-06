@@ -2,6 +2,7 @@
 
 	public enum Element {
 
+		None,
 		Life,
 		Water,
 		Fire,

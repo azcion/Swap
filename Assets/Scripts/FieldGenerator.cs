@@ -68,7 +68,7 @@ namespace Assets.Scripts {
 				List<Tile> row = new List<Tile>();
 
 				for (int x = 0; x < Width; ++x) {
-					int e = Random.Range(0, _tilePrefabs.Count);
+					int e = Random.Range(1, _tilePrefabs.Count);
 
 					GameObject go = Instantiate(_tilePrefabs[e], transform);
 					go.name = "T " + x + " " + y;
