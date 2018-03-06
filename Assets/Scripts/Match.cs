@@ -56,13 +56,13 @@ namespace Assets.Scripts {
 
 						if (matches > 2 && x == row.Count - 1) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y][x - i] = e;
+								_toDestroy[y][x - i] = type;
 							}
 						}
 					} else {
 						if (matches > 2) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y][x - 1 - i] = e;
+								_toDestroy[y][x - 1 - i] = type;
 							}
 						}
 
@@ -86,13 +86,13 @@ namespace Assets.Scripts {
 
 						if (matches > 2 && y == field.Count - 1) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y - i][x] = e;
+								_toDestroy[y - i][x] = type;
 							}
 						}
 					} else {
 						if (matches > 2) {
 							for (int i = 0; i < matches; ++i) {
-								_toDestroy[y - 1 - i][x] = e;
+								_toDestroy[y - 1 - i][x] = type;
 							}
 						}
 
