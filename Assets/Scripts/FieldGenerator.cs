@@ -23,17 +23,7 @@ namespace Assets.Scripts {
 		/// Move overlapped tile position to empty spot
 		/// </summary>
 		public static void Swap (Vector2 start, Vector2 end) {
-			int x0 = (int) start.x - 1;
-			int y0 = (int) start.y - 1;
-			int x1 = (int) end.x - 1;
-			int y1 = (int) end.y - 1;
-
-			Tile holdTile = _tiles[y0][x0];
-
-			Animate.Add(new AnimatePosition(holdTile, start, end));
-			
-			_tiles[y0][x0] = _tiles[y1][x1];
-			_tiles[y1][x1] = holdTile;
+			SwapPos((int) start.x - 1, (int) start.y - 1, (int) end.x - 1, (int) end.y - 1);
 		}
 
 		/// <summary>
@@ -42,6 +32,8 @@ namespace Assets.Scripts {
 		public static void Check () {
 			List<List<Element>> matched = Match.Check(ref _tiles);
 			Animate.Pop(_tiles, matched);
+			Drop();
+		}
 		}
 
 		/// <summary>
@@ -50,6 +42,45 @@ namespace Assets.Scripts {
 		[UsedImplicitly]
 		public void CheckOnClick () {
 			Check();
+		}
+
+		private static void SwapPos (int x0, int y0, int x1, int y1) {
+			Tile holdTile = _tiles[y0][x0];
+			Vector2 start = new Vector2(x0 + 1, y0 + 1);
+			Vector2 end = new Vector2(x1 + 1, y1 + 1);
+
+			Animate.Add(new AnimatePosition(holdTile, start, end));
+
+			_tiles[y0][x0] = _tiles[y1][x1];
+			_tiles[y1][x1] = holdTile;
+		}
+
+		private static void Drop () {
+			for (int x = 0; x < _tiles.Count; ++x) {
+				for (int y = 0; y < _tiles[0].Count; ++y) {
+					Tile t = _tiles[x][y];
+
+					if (t.IsEmpty) {
+						continue;
+					}
+
+					for (int up = x; up < Height; ++up) {
+						int drop = 0;
+
+						for (int down = x; down >= 0; --down) {
+							if (_tiles[down][y].IsEmpty) {
+								++drop;
+							}
+						}
+
+						if (drop == 0) {
+							continue;
+						}
+
+						SwapPos(y, up, y, up - drop);
+					}
+				}
+			}
 		}
 
 		[UsedImplicitly]
