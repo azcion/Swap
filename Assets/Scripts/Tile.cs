@@ -10,6 +10,7 @@ namespace Assets.Scripts {
 		public int X { get; private set; }
 
 		public Element Type { get; private set; }
+		public bool IsEmpty { get; private set; }
 
 		public GameObject GO { get; private set; }
 		public Transform Transform { get; private set; }
@@ -27,6 +28,7 @@ namespace Assets.Scripts {
 			Y = y;
 			X = x;
 			Type = type;
+			IsEmpty = false;
 
 			GO = go;
 			Transform = GO.transform;
@@ -39,6 +41,14 @@ namespace Assets.Scripts {
 			SpriteTransform = Transform.Find("Sprite");
 			SpriteGO = SpriteTransform.gameObject;
 			SpritePosition = SpriteTransform.localPosition;
+		}
+
+		public void SetEmpty () {
+			if (IsEmpty) {
+				Debug.LogError("Tile is already empty.");
+			}
+
+			IsEmpty = true;
 		}
 
 	}

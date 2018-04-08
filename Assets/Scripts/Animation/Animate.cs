@@ -33,6 +33,13 @@ namespace Assets.Scripts.Animation {
 
 					Tile t = tiles[y][x];
 
+					if (t.IsEmpty) {
+						Debug.LogError("Empty tile was matched.");
+						return;
+					}
+
+					t.SetEmpty();
+
 					Add(new AnimatePosition(t, Vector2.down, Duration.Medium));
 					Add(new AnimateRotation(t));
 					Add(new AnimateScale(t));
