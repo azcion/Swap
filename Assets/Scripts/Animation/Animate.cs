@@ -24,14 +24,14 @@ namespace Assets.Scripts.Animation {
 		/// <summary>
 		/// Add removal animations of matched tiles
 		/// </summary>
-		public static void Drop (List<List<Tile>> tiles, List<List<Element>> matched) {
-			for (int y = 0; y < tiles.Count; ++y) {
-				for (int x = 0; x < tiles[0].Count; ++x) {
+		public static void Drop (Tile[,] tiles, List<List<Element>> matched) {
+			for (int y = 0; y < FieldGenerator.Height; ++y) {
+				for (int x = 0; x < FieldGenerator.Width; ++x) {
 					if (matched[y][x] == 0) {
 						continue;
 					}
 
-					Tile t = tiles[y][x];
+					Tile t = tiles[y, x];
 
 					if (t.IsEmpty) {
 						Debug.LogError("Empty tile was matched.");

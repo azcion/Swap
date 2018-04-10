@@ -13,7 +13,7 @@ namespace Assets.Scripts {
 		/// <summary>
 		/// Check the field for matches of 3 or more and mark them for destruction
 		/// </summary>
-		public static List<List<Element>> Check (ref List<List<Tile>> field) {
+		public static List<List<Element>> Check (Tile[,] field) {
 			_toDestroy = new List<List<Element>>();
 
 			for (int y = 0; y < FieldGenerator.Height; ++y) {
@@ -42,19 +42,18 @@ namespace Assets.Scripts {
 			}
 		}
 
-		private static void FindHorizontal (IList<List<Tile>> field) {
-			for (int y = 0; y < field.Count; ++y) {
-				List<Tile> row = field[y];
-				Element type = row[0].Type;
+		private static void FindHorizontal (Tile[,] field) {
+			for (int y = 0; y < FieldGenerator.Height; ++y) {
+				Element type = field[y, 0].Type;
 				int matches = 0;
 
-				for (int x = 0; x < row.Count; ++x) {
-					Element e = row[x].Type;
+				for (int x = 0; x < FieldGenerator.Width; ++x) {
+					Element e = field[y, x].Type;
 
 					if (e == type) {
 						++matches;
 
-						if (matches > 2 && x == row.Count - 1) {
+						if (matches > 2 && x == FieldGenerator.Width - 1) {
 							for (int i = 0; i < matches; ++i) {
 								_toDestroy[y][x - i] = type;
 							}
@@ -73,18 +72,18 @@ namespace Assets.Scripts {
 			}
 		}
 
-		private static void FindVertical (IList<List<Tile>> field) {
-			for (int x = 0; x < field[0].Count; ++x) {
-				Element type = field[0][x].Type;
+		private static void FindVertical (Tile[,] field) {
+			for (int x = 0; x < FieldGenerator.Width; ++x) {
+				Element type = field[0, x].Type;
 				int matches = 0;
 
-				for (int y = 0; y < field.Count; ++y) {
-					Element e = field[y][x].Type;
+				for (int y = 0; y < FieldGenerator.Height; ++y) {
+					Element e = field[y, x].Type;
 
 					if (e == type) {
 						++matches;
 
-						if (matches > 2 && y == field.Count - 1) {
+						if (matches > 2 && y == FieldGenerator.Height - 1) {
 							for (int i = 0; i < matches; ++i) {
 								_toDestroy[y - i][x] = type;
 							}

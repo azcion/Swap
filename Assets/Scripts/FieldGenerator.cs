@@ -17,7 +17,7 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 		public const int DropHeight = 1;
 
-		private static List<List<Tile>> _tiles;
+		private static Tile[,] _tiles;
 		private static List<GameObject> _tilePrefabs;
 
 		private static FieldGenerator _instance;
@@ -33,7 +33,7 @@ namespace Assets.Scripts {
 		/// Call the static function Match.Check and pass it an instance of the grid
 		/// </summary>
 		public static void Check () {
-			List<List<Element>> matched = Match.Check(ref _tiles);
+			List<List<Element>> matched = Match.Check(_tiles);
 			Animate.Drop(_tiles, matched);
 			Drop();
 			_instance.StartCoroutine(DelayedFill(.2f));
@@ -51,33 +51,33 @@ namespace Assets.Scripts {
 		/// Swap the position of two tiles at x0, y0 and x1, y1 indices
 		/// </summary>
 		private static void SwapPos (int x0, int y0, int x1, int y1) {
-			Tile holdTile = _tiles[y0][x0];
+			Tile holdTile = _tiles[y0, x0];
 			Vector2 start = new Vector2(x0 + 1, y0 + 1);
 			Vector2 end = new Vector2(x1 + 1, y1 + 1);
 
 			Animate.Add(new AnimatePosition(holdTile, start, end));
 
-			_tiles[y0][x0] = _tiles[y1][x1];
-			_tiles[y1][x1] = holdTile;
+			_tiles[y0, x0] = _tiles[y1, x1];
+			_tiles[y1, x1] = holdTile;
 		}
 
 		/// <summary>
 		/// Make tiles drop to the bottom of their columns
 		/// </summary>
 		private static void Drop () {
-			for (int x = 0; x < _tiles.Count; ++x) {
-				for (int y = 0; y < _tiles[0].Count; ++y) {
-					Tile t = _tiles[x][y];
+			for (int y = 0; y < Height; ++y) {
+				for (int x = 0; x < Width; ++x) {
+					Tile t = _tiles[y, x];
 
 					if (t.IsEmpty) {
 						continue;
 					}
 
-					for (int up = x; up < Height; ++up) {
+					for (int up = y; up < Height; ++up) {
 						int drop = 0;
 
-						for (int down = x; down >= 0; --down) {
-							if (_tiles[down][y].IsEmpty) {
+						for (int down = y; down >= 0; --down) {
+							if (_tiles[down, x].IsEmpty) {
 								++drop;
 							}
 						}
@@ -86,7 +86,7 @@ namespace Assets.Scripts {
 							continue;
 						}
 
-						SwapPos(y, up, y, up - drop);
+						SwapPos(x, up, x, up - drop);
 					}
 				}
 			}
@@ -98,7 +98,7 @@ namespace Assets.Scripts {
 		private static void Fill () {
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
-					Tile oldTile = _tiles[y][x];
+					Tile oldTile = _tiles[y, x];
 
 					if (oldTile.IsEmpty == false) {
 						continue;
@@ -134,7 +134,7 @@ namespace Assets.Scripts {
 
 			Tile tile = go.AddComponent<Tile>();
 			tile.Initialize(go, y, x, (Element) element);
-			_tiles[y][x] = tile;
+			_tiles[y, x] = tile;
 
 			if (fill) {
 				// Set the alpha to 0 to prevent spawn flicker
@@ -147,7 +147,7 @@ namespace Assets.Scripts {
 		private void OnEnable () {
 			_instance = this;
 			_tilePrefabs = new List<GameObject>();
-			_tiles = new List<List<Tile>>();
+			_tiles = new Tile[Height, Width];
 
 			foreach (string element in Enum.GetNames(typeof(Element))) {
 				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
@@ -157,11 +157,7 @@ namespace Assets.Scripts {
 		[UsedImplicitly]
 		private void Start () {
 			for (int y = 0; y < Height; ++y) {
-				_tiles.Add(new List<Tile>());
-
 				for (int x = 0; x < Width; ++x) {
-					_tiles[y].Add(null);
-					
 					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), transform);
 				}
 			}
