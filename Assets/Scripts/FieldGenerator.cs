@@ -16,8 +16,7 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 
 		private static List<List<Tile>> _tiles;
-
-		private List<GameObject> _tilePrefabs;
+		private static List<GameObject> _tilePrefabs;
 		
 		/// <summary>
 		/// Move overlapped tile position to empty spot
@@ -33,7 +32,7 @@ namespace Assets.Scripts {
 			List<List<Element>> matched = Match.Check(ref _tiles);
 			Animate.Pop(_tiles, matched);
 			Drop();
-		}
+			Fill();
 		}
 
 		/// <summary>
@@ -79,6 +78,38 @@ namespace Assets.Scripts {
 
 						SwapPos(y, up, y, up - drop);
 					}
+				}
+			}
+		}
+
+		private static void Fill () {
+			for (int y = 0; y < Height; y++) {
+				for (int x = 0; x < Width; x++) {
+					Tile oldTile = _tiles[y][x];
+
+					if (oldTile.IsEmpty == false) {
+						continue;
+					}
+
+					int e = Random.Range(1, _tilePrefabs.Count);
+
+					GameObject go = Instantiate(_tilePrefabs[e], oldTile.Transform.parent);
+					go.name = "T " + x + " " + y;
+
+					Transform t = go.transform;
+
+					t.position = new Vector2(
+						InitPos + x,
+						InitPos + y);
+
+					t.GetChild(0).localPosition = Z.VSelectedTileOverlay;
+					t.GetChild(1).localPosition = Z.VTileSprite;
+
+					Tile tile = go.AddComponent<Tile>();
+					_tiles[y][x] = tile;
+
+					Destroy(oldTile);
+					tile.Initialize(go, y, x, (Element) e);
 				}
 			}
 		}
