@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Animation;
 using JetBrains.Annotations;
@@ -14,9 +15,12 @@ namespace Assets.Scripts {
 
 		public const int InitPos = 1;
 		public const float InitPosHalf = InitPos / 2f;
+		public const int DropHeight = 1;
 
 		private static List<List<Tile>> _tiles;
 		private static List<GameObject> _tilePrefabs;
+
+		private static FieldGenerator _instance;
 		
 		/// <summary>
 		/// Move overlapped tile position to empty spot
@@ -30,9 +34,9 @@ namespace Assets.Scripts {
 		/// </summary>
 		public static void Check () {
 			List<List<Element>> matched = Match.Check(ref _tiles);
-			Animate.Pop(_tiles, matched);
+			Animate.Drop(_tiles, matched);
 			Drop();
-			Fill();
+			_instance.StartCoroutine(DelayedFill(.2f));
 		}
 
 		/// <summary>
@@ -106,6 +110,12 @@ namespace Assets.Scripts {
 			}
 		}
 
+		private static IEnumerator DelayedFill (float seconds) {
+			yield return new WaitForSeconds(seconds);
+
+			Fill();
+		}
+
 		/// <summary>
 		/// Create a new tile of the specified element at position y, x
 		/// </summary>
@@ -117,7 +127,7 @@ namespace Assets.Scripts {
 
 			t.position = new Vector2(
 				InitPos + x,
-				InitPos + y);
+				InitPos + y + (fill ? DropHeight : 0));
 
 			t.GetChild(0).localPosition = Z.VSelectedTileOverlay;
 			t.GetChild(1).localPosition = Z.VTileSprite;
@@ -125,10 +135,17 @@ namespace Assets.Scripts {
 			Tile tile = go.AddComponent<Tile>();
 			tile.Initialize(go, y, x, (Element) element);
 			_tiles[y][x] = tile;
+
+			if (fill) {
+				// Set the alpha to 0 to prevent spawn flicker
+				tile.SpriteTransform.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+				Animate.Fill(tile);
+			}
 		}
 
 		[UsedImplicitly]
 		private void OnEnable () {
+			_instance = this;
 			_tilePrefabs = new List<GameObject>();
 			_tiles = new List<List<Tile>>();
 

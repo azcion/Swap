@@ -24,7 +24,7 @@ namespace Assets.Scripts.Animation {
 		/// <summary>
 		/// Add removal animations of matched tiles
 		/// </summary>
-		public static void Pop (List<List<Tile>> tiles, List<List<Element>> matched) {
+		public static void Drop (List<List<Tile>> tiles, List<List<Element>> matched) {
 			for (int y = 0; y < tiles.Count; ++y) {
 				for (int x = 0; x < tiles[0].Count; ++x) {
 					if (matched[y][x] == 0) {
@@ -46,6 +46,16 @@ namespace Assets.Scripts.Animation {
 					Add(new AnimateOpacity(t));
 				}
 			}
+		}
+
+		public static void Fill (Tile tile) {
+			int x = tile.X + 1;
+			int y = tile.Y + 1;
+			Vector2 start = new Vector2(x, FieldGenerator.Height + FieldGenerator.DropHeight);
+			Vector2 end = new Vector2(x, y);
+
+			Add(new AnimatePosition(tile, start, end, Duration.Long));
+			Add(new AnimateOpacity(tile, true));
 		}
 
 		/// <summary>
