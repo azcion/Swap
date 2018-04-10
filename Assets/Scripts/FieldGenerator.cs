@@ -91,27 +91,28 @@ namespace Assets.Scripts {
 						continue;
 					}
 
-					int e = Random.Range(1, _tilePrefabs.Count);
-
-					GameObject go = Instantiate(_tilePrefabs[e], oldTile.Transform.parent);
-					go.name = "T " + x + " " + y;
-
-					Transform t = go.transform;
-
-					t.position = new Vector2(
-						InitPos + x,
-						InitPos + y);
-
-					t.GetChild(0).localPosition = Z.VSelectedTileOverlay;
-					t.GetChild(1).localPosition = Z.VTileSprite;
-
-					Tile tile = go.AddComponent<Tile>();
-					_tiles[y][x] = tile;
-
+					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), oldTile.Transform.parent);
 					Destroy(oldTile);
-					tile.Initialize(go, y, x, (Element) e);
 				}
 			}
+		}
+
+		private static void CreateTile (int y, int x, int element, Transform parent) {
+			GameObject go = Instantiate(_tilePrefabs[element], parent);
+			go.name = "T " + x + " " + y;
+
+			Transform t = go.transform;
+
+			t.position = new Vector2(
+				InitPos + x,
+				InitPos + y);
+
+			t.GetChild(0).localPosition = Z.VSelectedTileOverlay;
+			t.GetChild(1).localPosition = Z.VTileSprite;
+
+			Tile tile = go.AddComponent<Tile>();
+			tile.Initialize(go, y, x, (Element) element);
+			_tiles[y][x] = tile;
 		}
 
 		[UsedImplicitly]
@@ -127,30 +128,13 @@ namespace Assets.Scripts {
 		[UsedImplicitly]
 		private void Start () {
 			for (int y = 0; y < Height; ++y) {
-				List<Tile> row = new List<Tile>();
+				_tiles.Add(new List<Tile>());
 
 				for (int x = 0; x < Width; ++x) {
-					int e = Random.Range(1, _tilePrefabs.Count);
-
-					GameObject go = Instantiate(_tilePrefabs[e], transform);
-					go.name = "T " + x + " " + y;
-
-					Transform t = go.transform;
-
-					t.position = new Vector2(
-						InitPos + x,
-						InitPos + y);
+					_tiles[y].Add(null);
 					
-					t.GetChild(0).localPosition = Z.VSelectedTileOverlay;
-					t.GetChild(1).localPosition = Z.VTileSprite;
-
-					Tile tile = go.AddComponent<Tile>();
-					tile.Initialize(go, y, x, (Element) e);
-
-					row.Add(tile);
+					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), transform);
 				}
-
-				_tiles.Add(row);
 			}
 		}
 
