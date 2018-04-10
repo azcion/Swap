@@ -24,10 +24,10 @@ namespace Assets.Scripts.Animation {
 		/// <summary>
 		/// Add removal animations of matched tiles
 		/// </summary>
-		public static void Drop (Tile[,] tiles, List<List<Element>> matched) {
+		public static void Drop (Tile[,] tiles, Element[,] matched) {
 			for (int y = 0; y < FieldGenerator.Height; ++y) {
 				for (int x = 0; x < FieldGenerator.Width; ++x) {
-					if (matched[y][x] == 0) {
+					if (matched[y, x] == 0) {
 						continue;
 					}
 

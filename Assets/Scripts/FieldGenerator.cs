@@ -33,7 +33,7 @@ namespace Assets.Scripts {
 		/// Call the static function Match.Check and pass it an instance of the grid
 		/// </summary>
 		public static void Check () {
-			List<List<Element>> matched = Match.Check(_tiles);
+			Element[,] matched = Match.Check(_tiles);
 			Animate.Drop(_tiles, matched);
 			Drop();
 			_instance.StartCoroutine(DelayedFill(.2f));
