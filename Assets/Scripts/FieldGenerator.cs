@@ -100,7 +100,7 @@ namespace Assets.Scripts {
 						continue;
 					}
 
-					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), oldTile.Transform.parent);
+					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), oldTile.Transform.parent, true);
 					oldTile.Destroy();
 				}
 			}
@@ -109,7 +109,7 @@ namespace Assets.Scripts {
 		/// <summary>
 		/// Create a new tile of the specified element at position y, x
 		/// </summary>
-		private static void CreateTile (int y, int x, int element, Transform parent) {
+		private static void CreateTile (int y, int x, int element, Transform parent, bool fill = false) {
 			GameObject go = Instantiate(_tilePrefabs[element], parent);
 			go.name = "T " + x + " " + y;
 
