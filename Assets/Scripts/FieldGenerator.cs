@@ -43,6 +43,9 @@ namespace Assets.Scripts {
 			Check();
 		}
 
+		/// <summary>
+		/// Swap the position of two tiles at x0, y0 and x1, y1 indices
+		/// </summary>
 		private static void SwapPos (int x0, int y0, int x1, int y1) {
 			Tile holdTile = _tiles[y0][x0];
 			Vector2 start = new Vector2(x0 + 1, y0 + 1);
@@ -54,6 +57,9 @@ namespace Assets.Scripts {
 			_tiles[y1][x1] = holdTile;
 		}
 
+		/// <summary>
+		/// Make tiles drop to the bottom of their columns
+		/// </summary>
 		private static void Drop () {
 			for (int x = 0; x < _tiles.Count; ++x) {
 				for (int y = 0; y < _tiles[0].Count; ++y) {
@@ -82,6 +88,9 @@ namespace Assets.Scripts {
 			}
 		}
 
+		/// <summary>
+		/// Create new random tiles on all empty fields
+		/// </summary>
 		private static void Fill () {
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
@@ -97,6 +106,9 @@ namespace Assets.Scripts {
 			}
 		}
 
+		/// <summary>
+		/// Create a new tile of the specified element at position y, x
+		/// </summary>
 		private static void CreateTile (int y, int x, int element, Transform parent) {
 			GameObject go = Instantiate(_tilePrefabs[element], parent);
 			go.name = "T " + x + " " + y;
