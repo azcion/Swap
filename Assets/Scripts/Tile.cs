@@ -51,6 +51,13 @@ namespace Assets.Scripts {
 			IsEmpty = true;
 		}
 
+		public void Destroy () {
+			Destroy(OverlayGO, .65f);
+			Destroy(SpriteGO, .65f);
+			Destroy(GO, .65f);
+			Destroy(this, .65f);
+		}
+
 	}
 
 }

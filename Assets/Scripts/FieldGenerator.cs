@@ -101,7 +101,7 @@ namespace Assets.Scripts {
 					}
 
 					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), oldTile.Transform.parent);
-					Destroy(oldTile);
+					oldTile.Destroy();
 				}
 			}
 		}
