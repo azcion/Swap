@@ -37,6 +37,10 @@ namespace Assets.Scripts {
 			Animate.Drop(_tiles, matched);
 			Drop();
 			_instance.StartCoroutine(DelayedFill(.2f));
+
+			if (Animate.TilesDroppedThisRound > 0) {
+				_instance.StartCoroutine(DelayedRecheck(1));
+			}
 		}
 
 		/// <summary>
@@ -114,6 +118,12 @@ namespace Assets.Scripts {
 			yield return new WaitForSeconds(seconds);
 
 			Fill();
+		}
+
+		private static IEnumerator DelayedRecheck (float seconds) {
+			yield return new WaitForSeconds(seconds);
+
+			Check();
 		}
 
 		/// <summary>

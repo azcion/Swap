@@ -5,12 +5,16 @@ namespace Assets.Scripts.Animation {
 
 	internal static class Animate {
 
+		public static int TilesDroppedThisRound;
+		public static int TilesDroppedTotal;
+
 		private static readonly List<IAnimate> Animations;
 
 		private static int _animationsPending;
 
 		static Animate () {
 			Animations = new List<IAnimate>();
+			TilesDroppedTotal = 0;
 		}
 
 		/// <summary>
@@ -25,6 +29,8 @@ namespace Assets.Scripts.Animation {
 		/// Add removal animations of matched tiles
 		/// </summary>
 		public static void Drop (Tile[,] tiles, Element[,] matched) {
+			TilesDroppedThisRound = 0;
+
 			for (int y = 0; y < FieldGenerator.Height; ++y) {
 				for (int x = 0; x < FieldGenerator.Width; ++x) {
 					if (matched[y, x] == 0) {
@@ -39,6 +45,7 @@ namespace Assets.Scripts.Animation {
 					}
 
 					t.SetEmpty();
+					++TilesDroppedThisRound;
 
 					Add(new AnimatePosition(t, Vector2.down, Duration.Medium));
 					Add(new AnimateRotation(t));
@@ -46,6 +53,8 @@ namespace Assets.Scripts.Animation {
 					Add(new AnimateOpacity(t));
 				}
 			}
+
+			TilesDroppedTotal += TilesDroppedThisRound;
 		}
 
 		public static void Fill (Tile tile) {
