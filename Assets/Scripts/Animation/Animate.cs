@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Animation {
 
 	internal static class Animate {
 
-		public static int TilesDroppedThisRound;
-		public static int TilesDroppedTotal;
-
+		public static int TilesPoppedThisRound { get; private set; }
+		public static int TilesPoppedTotal { get; private set; }
+		
 		private static readonly List<IAnimate> Animations;
 
 		private static int _animationsPending;
 
 		static Animate () {
 			Animations = new List<IAnimate>();
-			TilesDroppedTotal = 0;
+			TilesPoppedThisRound = 0;
+			TilesPoppedTotal = 0;
 		}
 
 		/// <summary>
@@ -28,8 +30,9 @@ namespace Assets.Scripts.Animation {
 		/// <summary>
 		/// Add removal animations of matched tiles
 		/// </summary>
-		public static void Drop (Tile[,] tiles, Element[,] matched) {
-			TilesDroppedThisRound = 0;
+		public static void Pop (Tile[,] tiles, Element[,] matched) {
+			TilesPoppedThisRound = 0;
+			float delay = 0;
 
 			for (int y = 0; y < FieldGenerator.Height; ++y) {
 				for (int x = 0; x < FieldGenerator.Width; ++x) {
@@ -45,18 +48,19 @@ namespace Assets.Scripts.Animation {
 					}
 
 					t.SetEmpty();
-					++TilesDroppedThisRound;
+					++TilesPoppedThisRound;
 
-					Add(new AnimatePosition(t, Vector2.down, Duration.Medium));
-					Add(new AnimateRotation(t));
-					Add(new AnimateScale(t));
-					Add(new AnimateOpacity(t));
+					FieldGenerator.Instance.StartCoroutine(DelayedPop(delay, t));
+					delay += Duration.SinglePopDelay;
 				}
 			}
 
-			TilesDroppedTotal += TilesDroppedThisRound;
+			TilesPoppedTotal += TilesPoppedThisRound;
 		}
 
+		/// <summary>
+		/// Add fill animation for tile
+		/// </summary>
 		public static void Fill (Tile tile) {
 			int x = tile.X + 1;
 			int y = tile.Y + 1;
@@ -93,6 +97,15 @@ namespace Assets.Scripts.Animation {
 			}
 
 			_animationsPending -= indexesToRemove.Count;
+		}
+
+		private static IEnumerator DelayedPop (float seconds, Tile tile) {
+			yield return new WaitForSeconds(seconds);
+
+			Add(new AnimatePosition(tile, Vector2.down, Duration.Long));
+			Add(new AnimateRotation(tile));
+			Add(new AnimateScale(tile));
+			Add(new AnimateOpacity(tile));
 		}
 
 	}

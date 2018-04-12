@@ -17,30 +17,23 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 		public const int DropHeight = 1;
 
+		public static FieldGenerator Instance;
+
 		private static Tile[,] _tiles;
 		private static List<GameObject> _tilePrefabs;
 
-		private static FieldGenerator _instance;
-		
+		/// <summary>
+		/// Start a coroutine that finds, removes and replaces matched tiles
+		/// </summary>
+		public static void Check () {
+			Instance.StartCoroutine(PopDropFillCheck());
+		}
+
 		/// <summary>
 		/// Move overlapped tile position to empty spot
 		/// </summary>
 		public static void Swap (Vector2 start, Vector2 end) {
-			SwapPos((int) start.x - 1, (int) start.y - 1, (int) end.x - 1, (int) end.y - 1);
-		}
-
-		/// <summary>
-		/// Call the static function Match.Check and pass it an instance of the grid
-		/// </summary>
-		public static void Check () {
-			Element[,] matched = Match.Check(_tiles);
-			Animate.Drop(_tiles, matched);
-			Drop();
-			_instance.StartCoroutine(DelayedFill(.2f));
-
-			if (Animate.TilesDroppedThisRound > 0) {
-				_instance.StartCoroutine(DelayedRecheck(1));
-			}
+			SwapPos((int)start.x - 1, (int)start.y - 1, (int)end.x - 1, (int)end.y - 1);
 		}
 
 		/// <summary>
@@ -52,6 +45,27 @@ namespace Assets.Scripts {
 		}
 
 		/// <summary>
+		/// Find, remove and replace matched tiles, then restart if a match was found
+		/// </summary>
+		private static IEnumerator PopDropFillCheck () {
+			yield return new WaitForSeconds(Duration.Short);
+			Animate.Pop(_tiles, Match.Check(_tiles));
+
+			if (Animate.TilesPoppedThisRound == 0) {
+				yield break;
+			}
+
+			yield return new WaitForSeconds(Duration.Medium);
+			Drop();
+
+			yield return new WaitForSeconds(Duration.Wait);
+			Fill();
+
+			yield return new WaitForSeconds(Duration.SafeWait);
+			Check();
+		}
+
+		/// <summary>
 		/// Swap the position of two tiles at x0, y0 and x1, y1 indices
 		/// </summary>
 		private static void SwapPos (int x0, int y0, int x1, int y1) {
@@ -59,7 +73,7 @@ namespace Assets.Scripts {
 			Vector2 start = new Vector2(x0 + 1, y0 + 1);
 			Vector2 end = new Vector2(x1 + 1, y1 + 1);
 
-			Animate.Add(new AnimatePosition(holdTile, start, end));
+			Animate.Add(new AnimatePosition(holdTile, start, end, Duration.Short));
 
 			_tiles[y0, x0] = _tiles[y1, x1];
 			_tiles[y1, x1] = holdTile;
@@ -114,18 +128,6 @@ namespace Assets.Scripts {
 			}
 		}
 
-		private static IEnumerator DelayedFill (float seconds) {
-			yield return new WaitForSeconds(seconds);
-
-			Fill();
-		}
-
-		private static IEnumerator DelayedRecheck (float seconds) {
-			yield return new WaitForSeconds(seconds);
-
-			Check();
-		}
-
 		/// <summary>
 		/// Create a new tile of the specified element at position y, x
 		/// </summary>
@@ -155,7 +157,7 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnEnable () {
-			_instance = this;
+			Instance = this;
 			_tilePrefabs = new List<GameObject>();
 			_tiles = new Tile[Height, Width];
 
