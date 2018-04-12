@@ -28,14 +28,14 @@ namespace Assets.Scripts.Animation {
 			float covered = Time.time - StartTime;
 
 			if (!_reverse) {
-				float frac = 1 - covered / DurationMedium;
+				float frac = 1 - covered / Duration.Medium;
 				_sprite.color = new Color(1, 1, 1, frac);
 
 				if (frac <= 0) {
 					Active = false;
 				}
 			} else {
-				float frac = 0 + covered / DurationMedium;
+				float frac = 0 + covered / Duration.Medium;
 				_sprite.color = new Color(1, 1, 1, frac);
 
 				if (frac >= 1) {

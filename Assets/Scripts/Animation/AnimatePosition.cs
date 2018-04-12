@@ -4,16 +4,16 @@ namespace Assets.Scripts.Animation {
 
 	internal sealed class AnimatePosition : AbstractAnimation, IAnimate {
 
-		public AnimatePosition (Tile tile, Vector2 start, Vector2 end, Duration duration = Duration.Short) {
+		public AnimatePosition (Tile tile, Vector2 start, Vector2 end, float duration = Duration.Medium) {
 			Active = true;
 			Tile = tile;
 			Start = start;
 			End = end;
-			DurationOverride = DurationValue(duration);
+			DurationOverride = duration;
 			StartTime = Time.time;
 		}
 
-		public AnimatePosition (Tile tile, Vector2 delta, Duration duration = Duration.Short)
+		public AnimatePosition (Tile tile, Vector2 delta, float duration = Duration.Medium)
 			: this(tile, new Vector2(tile.Transform.position.x, tile.Transform.position.y),
 				new Vector2(tile.Transform.position.x + delta.x, tile.Transform.position.y + delta.y),
 				duration) {
@@ -36,19 +36,6 @@ namespace Assets.Scripts.Animation {
 
 			if (Fraction >= 1) {
 				Active = false;
-			}
-		}
-
-		private static float DurationValue (Duration duration) {
-			switch (duration) {
-				case Duration.Short:
-					return DurationShort;
-				case Duration.Medium:
-					return DurationMedium;
-				case Duration.Long:
-					return DurationLong;
-				default:
-					return DurationShort;
 			}
 		}
 
