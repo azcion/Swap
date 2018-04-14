@@ -111,7 +111,6 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnMouseDrag () {
-			Debug.Log(_timeRemaining);
 			if (Lock) {
 				return;
 			}

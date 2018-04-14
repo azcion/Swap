@@ -39,14 +39,6 @@ namespace Assets.Scripts {
 		}
 
 		/// <summary>
-		/// Call the static function FieldGenerator.Check on button press
-		/// </summary>
-		[UsedImplicitly]
-		public void CheckOnClick () {
-			Check();
-		}
-
-		/// <summary>
 		/// Find, remove and replace matched tiles, then restart if a match was found
 		/// </summary>
 		private static IEnumerator UpdateField () {
