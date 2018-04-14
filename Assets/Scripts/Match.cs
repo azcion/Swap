@@ -1,13 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
-namespace Assets.Scripts {
+﻿namespace Assets.Scripts {
 
 	internal static class Match {
 
 		private static Element[,] _toDestroy;
-
-		private static readonly Text T = GameObject.Find("Text").transform.GetComponent<Text>();
 
 		/// <summary>
 		/// Check the field for matches of 3 or more and mark them for destruction
@@ -18,24 +13,7 @@ namespace Assets.Scripts {
 			FindHorizontal(field);
 			FindVertical(field);
 
-			Debug();
-
 			return _toDestroy;
-		}
-
-		private static void Debug () {
-			T.text = Time.timeSinceLevelLoad + "";
-
-			for (int y = 0; y < FieldGenerator.Height; ++y) {
-				string line = "";
-
-				for (int x = 0; x < FieldGenerator.Width; x++) {
-					Element e = _toDestroy[y, x];
-					line += (int) e + " ";
-				}
-
-				T.text = line + "\n" + T.text;
-			}
 		}
 
 		private static void FindHorizontal (Tile[,] field) {
