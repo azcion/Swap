@@ -14,6 +14,8 @@
 		public const float SinglePopDelay = .03f;
 		public const float SingleFillDelay = .02f;
 
+		public const float DragTime = 5;
+
 	}
 
 }

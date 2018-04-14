@@ -1,5 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using Assets.Scripts.Animation;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts {
 
@@ -20,11 +22,11 @@ namespace Assets.Scripts {
 		private Transform _parent;
 		private GameObject _selectedOverlay;
 		private Transform _sprite;
-
 		private Vector3 _initialPos;
 		private Vector3 _hoverOverPos;
-
 		private Vector3 _mOld;
+
+		private float _timeRemaining;
 
 		/// <summary> 
 		/// Snap tile position to grid 
@@ -50,10 +52,12 @@ namespace Assets.Scripts {
 			_selectedOverlay.SetActive(true);
 			_initialPos = Interpolate(_parent.position);
 			_hoverOverPos = _initialPos;
+			_timeRemaining = Duration.DragTime;
 		}
 
 		[UsedImplicitly]
 		private void OnMouseUp () {
+			_timeRemaining = 0;
 			_selectedOverlay.SetActive(false);
 			// Return to initial Z
 			_sprite.localPosition = Z.VTileSprite;
@@ -64,6 +68,13 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnMouseDrag () {
+			_timeRemaining -= Time.deltaTime;
+
+			if (_timeRemaining <= 0) {
+				OnMouseUp();
+				return;
+			}
+
 			Vector3 m = Input.mousePosition;
 
 			if ((int) _mOld.x == (int) m.x && (int) _mOld.y == (int) m.y) {
