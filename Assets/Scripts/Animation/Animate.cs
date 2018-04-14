@@ -8,6 +8,8 @@ namespace Assets.Scripts.Animation {
 
 		public static int TilesPoppedThisRound { get; private set; }
 		public static int TilesPoppedTotal { get; private set; }
+
+		public static bool IsAnimating { get; private set; }
 		
 		private static readonly List<IAnimate> Animations;
 
@@ -76,9 +78,11 @@ namespace Assets.Scripts.Animation {
 		/// </summary>
 		public static void Update () {
 			if (_animationsPending == 0) {
+				IsAnimating = false;
 				return;
 			}
 
+			IsAnimating = true;
 			List<int> indexesToRemove = new List<int>();
 
 			for (int i = 0; i < Animations.Count; ++i) {
