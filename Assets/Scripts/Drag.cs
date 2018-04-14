@@ -19,8 +19,13 @@ namespace Assets.Scripts {
 
 		}
 
+		public static bool IsDragging;
 		public static bool AllowUnlock;
 		public static bool Lock;
+
+		private static Slider _output;
+		private static GameObject _barBackground;
+		private static GameObject _barFill;
 
 		private Transform _parent;
 		private GameObject _selectedOverlay;
@@ -28,7 +33,6 @@ namespace Assets.Scripts {
 		private Vector3 _initialPos;
 		private Vector3 _hoverOverPos;
 		private Vector3 _mOld;
-
 		private float _timeRemaining;
 
 		/// <summary> 
@@ -41,12 +45,24 @@ namespace Assets.Scripts {
 			return new Vector2(x, y);
 		}
 
+		private static void SetOutputVisibility (bool visible) {
+			_barBackground.SetActive(visible);
+			_barFill.SetActive(visible);
+		}
+
 		[UsedImplicitly]
 		private void OnEnable () {
+			IsDragging = false;
 			Lock = false;
 			_parent = transform.parent.transform;
 			_selectedOverlay = transform.parent.GetChild(0).gameObject;
 			_sprite = transform.parent.GetChild(1);
+
+			GameObject timerBar = GameObject.Find("Timer Bar");
+			_output = timerBar.GetComponent<Slider>();
+			_barBackground = timerBar.transform.GetChild(0).gameObject;
+			_barFill = timerBar.transform.GetChild(1).gameObject;
+			SetOutputVisibility(false);
 		}
 
 		[UsedImplicitly]
@@ -56,9 +72,6 @@ namespace Assets.Scripts {
 			}
 
 			_timeRemaining -= Time.deltaTime;
-
-			Text T = GameObject.Find("Text").transform.GetComponent<Text>();
-			T.text = Lock + "";
 		}
 
 		[UsedImplicitly]
@@ -67,6 +80,8 @@ namespace Assets.Scripts {
 				return;
 			}
 
+			IsDragging = true;
+			SetOutputVisibility(true);
 			// Bring to front to prevent from being overlapped
 			_sprite.localPosition = Z.VSelectedTileSprite;
 			_selectedOverlay.SetActive(true);
@@ -81,19 +96,22 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			Lock = true;
+			IsDragging = false;
 			AllowUnlock = false;
+			Lock = true;
 			_timeRemaining = 0;
 			_selectedOverlay.SetActive(false);
 			// Return to initial Z
 			_sprite.localPosition = Z.VTileSprite;
 			_parent.position = Interpolate(_parent.position);
+			SetOutputVisibility(false);
 
 			FieldGenerator.Check();
 		}
 
 		[UsedImplicitly]
 		private void OnMouseDrag () {
+			Debug.Log(_timeRemaining);
 			if (Lock) {
 				return;
 			}
@@ -103,6 +121,7 @@ namespace Assets.Scripts {
 				return;
 			}
 
+			_output.value = _timeRemaining;
 			Vector3 m = Input.mousePosition;
 
 			if ((int) _mOld.x == (int) m.x && (int) _mOld.y == (int) m.y) {
