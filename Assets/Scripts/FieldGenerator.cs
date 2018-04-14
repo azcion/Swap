@@ -26,7 +26,9 @@ namespace Assets.Scripts {
 		/// Start a coroutine that finds, removes and replaces matched tiles
 		/// </summary>
 		public static void Check () {
-			Instance.StartCoroutine(PopDropFillCheck());
+			Drag.Lock = true;
+			Drag.AllowUnlock = false;
+			Instance.StartCoroutine(UpdateField());
 		}
 
 		/// <summary>
@@ -47,20 +49,22 @@ namespace Assets.Scripts {
 		/// <summary>
 		/// Find, remove and replace matched tiles, then restart if a match was found
 		/// </summary>
-		private static IEnumerator PopDropFillCheck () {
+		private static IEnumerator UpdateField () {
 			yield return new WaitForSeconds(Duration.Short);
 			Animate.Pop(_tiles, Match.Check(_tiles));
 
 			if (Animate.TilesPoppedThisRound == 0) {
+				Drag.AllowUnlock = true;
 				yield break;
 			}
-
+			
 			yield return new WaitForSeconds(Duration.Medium);
 			Drop();
 
 			yield return new WaitForSeconds(Duration.Wait);
 			Fill();
 
+			Drag.Lock = true;
 			yield return new WaitForSeconds(Duration.SafeWait);
 			Check();
 		}

@@ -19,6 +19,9 @@ namespace Assets.Scripts {
 
 		}
 
+		public static bool AllowUnlock;
+		public static bool Lock;
+
 		private Transform _parent;
 		private GameObject _selectedOverlay;
 		private Transform _sprite;
@@ -40,13 +43,28 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnEnable () {
+			Lock = false;
 			_parent = transform.parent.transform;
 			_selectedOverlay = transform.parent.GetChild(0).gameObject;
 			_sprite = transform.parent.GetChild(1);
 		}
 
 		[UsedImplicitly]
+		private void LateUpdate () {
+			if (AllowUnlock && Animate.TilesPoppedThisRound == 0 && !Animate.IsAnimating) {
+				Lock = false;
+			}
+
+			Text T = GameObject.Find("Text").transform.GetComponent<Text>();
+			T.text = Lock + "";
+		}
+
+		[UsedImplicitly]
 		private void OnMouseDown () {
+			if (Lock) {
+				return;
+			}
+
 			// Bring to front to prevent from being overlapped
 			_sprite.localPosition = Z.VSelectedTileSprite;
 			_selectedOverlay.SetActive(true);
@@ -57,6 +75,12 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnMouseUp () {
+			if (Lock) {
+				return;
+			}
+
+			Lock = true;
+			AllowUnlock = false;
 			_timeRemaining = 0;
 			_selectedOverlay.SetActive(false);
 			// Return to initial Z
@@ -68,6 +92,10 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private void OnMouseDrag () {
+			if (Lock) {
+				return;
+			}
+
 			_timeRemaining -= Time.deltaTime;
 
 			if (_timeRemaining <= 0) {
