@@ -9,7 +9,7 @@ namespace Assets.Scripts {
 
 		[UsedImplicitly]
 		private IEnumerator Start () {
-			Screen.SetResolution(419, 543, false);
+			Screen.SetResolution(504, 896, false);
 
 			while (!SplashScreen.isFinished) {
 				yield return null;
