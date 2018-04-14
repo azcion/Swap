@@ -26,6 +26,7 @@ namespace Assets.Scripts {
 		private static Slider _output;
 		private static GameObject _barBackground;
 		private static GameObject _barFill;
+		private static Image _barColor;
 
 		private Transform _parent;
 		private GameObject _selectedOverlay;
@@ -62,6 +63,7 @@ namespace Assets.Scripts {
 			_output = timerBar.GetComponent<Slider>();
 			_barBackground = timerBar.transform.GetChild(0).gameObject;
 			_barFill = timerBar.transform.GetChild(1).gameObject;
+			_barColor = _barFill.transform.GetChild(0).gameObject.GetComponent<Image>();
 			SetOutputVisibility(false);
 		}
 
@@ -121,6 +123,7 @@ namespace Assets.Scripts {
 			}
 
 			_output.value = _timeRemaining;
+			_barColor.color = Color.Lerp(Color.red, Color.white, _timeRemaining / 5);
 			Vector3 m = Input.mousePosition;
 
 			if ((int) _mOld.x == (int) m.x && (int) _mOld.y == (int) m.y) {
