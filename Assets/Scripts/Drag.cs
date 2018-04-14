@@ -55,6 +55,8 @@ namespace Assets.Scripts {
 				Lock = false;
 			}
 
+			_timeRemaining -= Time.deltaTime;
+
 			Text T = GameObject.Find("Text").transform.GetComponent<Text>();
 			T.text = Lock + "";
 		}
@@ -95,8 +97,6 @@ namespace Assets.Scripts {
 			if (Lock) {
 				return;
 			}
-
-			_timeRemaining -= Time.deltaTime;
 
 			if (_timeRemaining <= 0) {
 				OnMouseUp();
