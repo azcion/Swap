@@ -29,6 +29,10 @@ namespace Assets.Scripts {
 		private void OnEnable () {
 			_gridBackground = transform.Find("Grid Background").transform;
 			_panels = transform.Find("Panels").transform;
+
+			Vector3 v = _panels.position;
+			_panels.position = new Vector3(v.x, v.y, Z.Panel);
+
 			_panel0 = _panels.GetChild(0).GetComponent<SpriteRenderer>();
 			_panel1 = _panels.GetChild(1).GetComponent<SpriteRenderer>();
 			_panel2 = _panels.GetChild(2).GetComponent<SpriteRenderer>();

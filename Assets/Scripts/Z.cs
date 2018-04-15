@@ -10,7 +10,8 @@ namespace Assets.Scripts {
 		public const int SelectedTileOverlay = 5;
 		public const int SelectedTileSprite = SelectedTileOverlay + 1;
 		public const int TileSprite = SelectedTileSprite + 1;
-		public const int GridBackground = TileSprite + 1;
+		public const int Panel = TileSprite + 1;
+		public const int GridBackground = Panel + 1;
 
 		public static Vector3 VSelectedTileOverlay;
 		public static Vector3 VSelectedTileSprite;
