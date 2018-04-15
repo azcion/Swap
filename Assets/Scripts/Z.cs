@@ -12,7 +12,6 @@ namespace Assets.Scripts {
 		public const int TileSprite = SelectedTileSprite + 1;
 		public const int GridBackground = TileSprite + 1;
 
-		public static Vector3 VCamera;
 		public static Vector3 VSelectedTileOverlay;
 		public static Vector3 VSelectedTileSprite;
 		public static Vector3 VTileSprite;
@@ -20,11 +19,6 @@ namespace Assets.Scripts {
 
 		static Z () {
 			Vector3 f = Vector3.forward;
-
-			VCamera = new Vector3(
-				1 + FieldGenerator.Width * FieldGenerator.InitPosHalf - FieldGenerator.InitPosHalf,
-				1 + FieldGenerator.Height * FieldGenerator.InitPos - FieldGenerator.InitPos,
-				Camera);
 
 			VTileSprite = f * TileSprite;
 			VSelectedTileSprite = f * SelectedTileSprite;

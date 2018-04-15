@@ -15,7 +15,8 @@ namespace Assets.Scripts {
 				yield return null;
 			}
 
-			Camera.main.transform.position = Z.VCamera;
+			Vector3 v = Camera.main.transform.position;
+			Camera.main.transform.position = new Vector3(v.x, v.y, Z.Camera);
 		}
 
 	}
