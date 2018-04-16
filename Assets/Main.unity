@@ -720,6 +720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 581838099}
   - component: {fileID: 581838100}
+  - component: {fileID: 581838101}
   m_Layer: 0
   m_Name: Grid Background
   m_TagString: Untagged
@@ -784,6 +785,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &581838101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 581838098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89e58fb57f313214d906a2f77de6c9b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &668320525
 GameObject:
   m_ObjectHideFlags: 0
@@ -1220,6 +1232,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1577482518}
+  - component: {fileID: 1577482519}
   m_Layer: 0
   m_Name: Panels
   m_TagString: Untagged
@@ -1245,6 +1258,23 @@ Transform:
   m_Father: {fileID: 1796246108}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1577482519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1577482517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b0a946e99ef2b438034e2c1b757c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PanelSprites:
+  - {fileID: 21300000, guid: c3f326285a9355243908b928ee00592c, type: 3}
+  - {fileID: 21300000, guid: c50e58bf32771e34b94cface0bde669e, type: 3}
+  - {fileID: 21300000, guid: 9656f0c761fb59941860e3492d128332, type: 3}
+  - {fileID: 21300000, guid: 51af72abd36cb7945b7edd3da174b8b2, type: 3}
+  - {fileID: 21300000, guid: 80fd564015dba3b4c91ae041653199c2, type: 3}
 --- !u!1 &1790039182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1322,7 +1352,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1796246108}
-  - component: {fileID: 1796246106}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -1330,23 +1359,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1796246106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1796246105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2d094b648c2614699a36fa7dd4c7d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PanelSprites:
-  - {fileID: 21300000, guid: c3f326285a9355243908b928ee00592c, type: 3}
-  - {fileID: 21300000, guid: c50e58bf32771e34b94cface0bde669e, type: 3}
-  - {fileID: 21300000, guid: 9656f0c761fb59941860e3492d128332, type: 3}
-  - {fileID: 21300000, guid: 51af72abd36cb7945b7edd3da174b8b2, type: 3}
-  - {fileID: 21300000, guid: 80fd564015dba3b4c91ae041653199c2, type: 3}
 --- !u!4 &1796246108
 Transform:
   m_ObjectHideFlags: 0
