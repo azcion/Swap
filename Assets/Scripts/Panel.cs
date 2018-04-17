@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts {
 
-	public class Panel {
+	internal sealed class Panel {
 
 		public readonly Element Type;
 		public readonly int Health;

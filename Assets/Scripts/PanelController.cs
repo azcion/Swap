@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts {
 
-	public class PanelController : MonoBehaviour {
+	internal sealed class PanelController : MonoBehaviour {
 
 		[UsedImplicitly]
 		public Sprite[] PanelSprites = new Sprite[5];

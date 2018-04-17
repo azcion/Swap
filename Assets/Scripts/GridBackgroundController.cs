@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts {
 
-	public class GridBackgroundController : MonoBehaviour {
+	internal sealed class GridBackgroundController : MonoBehaviour {
 
 		[UsedImplicitly]
 		private void OnEnable () {

@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Assets.Scripts {
 
-	public class CameraController : MonoBehaviour {
+	internal sealed class CameraController : MonoBehaviour {
 
 		[UsedImplicitly]
 		private IEnumerator Start () {

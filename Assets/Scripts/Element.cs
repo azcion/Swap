@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts {
 
-	public enum Element {
+	internal enum Element {
 
 		None,
 		Life,

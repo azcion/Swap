@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts.Animation {
 
-	public static class Duration {
+	internal static class Duration {
 
 		public const float Wait = SinglePopDelay * FieldGenerator.Width * FieldGenerator.Height;
 		public const float SafeWait = Wait + Long;
