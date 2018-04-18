@@ -1,33 +1,79 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Assets.Scripts {
 
 	internal sealed class PanelController : MonoBehaviour {
 
-		[UsedImplicitly]
-		public Sprite[] PanelSprites = new Sprite[5];
+		public static int[] RoundValuesPerElement;
 
-		private static SpriteRenderer[] _panelRenderers;
+		private const int MaxPanels = 5;
 
-		public SpriteRenderer GetPanel (int index) {
-			return _panelRenderers[index];
+		private static readonly int ElementCount;
+		private static readonly Panel[] Panels;
+		private static readonly Sprite[] PanelSprites;
+		private static readonly SpriteRenderer[] PanelRenderers;
+
+		static PanelController () {
+			ElementCount = Enum.GetValues(typeof(Element)).Length;
+			Panels = new Panel[MaxPanels];
+			PanelRenderers = new SpriteRenderer[MaxPanels];
+			PanelSprites = new Sprite[ElementCount];
 		}
 
-		private void Debug () {
-			for (int i = 0; i < 5; ++i) {
-				_panelRenderers[i].sprite = PanelSprites[i];
+		/// <summary>
+		/// Add values earned during this round to corresponding panels
+		/// </summary>
+		public static void AssignRoundValues () {
+			foreach (Panel panel in Panels) {
+				panel.AddValue(RoundValuesPerElement[(int) panel.Type]);
 			}
+
+			RoundValuesPerElement = new int[ElementCount];
+		}
+
+		/// <summary>
+		/// Show correct backgrounds for the panels' corresponding types
+		/// </summary>
+		private static void AssignBackgrounds () {
+			for (int i = 0; i < Panels.Length; ++i) {
+				PanelRenderers[i].sprite = PanelSprites[(int)Panels[i].Type];
+			}
+		}
+
+		private static void Debug () {
+			for (int i = 0; i < 5; ++i) {
+				Panels[i] = new Panel((Element) (i + 2), 10);
+			}
+
+			AssignBackgrounds();
+		}
+
+		public static void DebugValues () {
+			string log = "";
+
+			foreach (int value in RoundValuesPerElement) {
+				log += value + " ";
+			}
+
+			UnityEngine.Debug.Log(log);
 		}
 
 		[UsedImplicitly]
 		private void OnEnable () {
 			Vector3 v = transform.localPosition;
 			transform.localPosition = new Vector3(v.x, v.y, Z.Panel);
-			_panelRenderers = new SpriteRenderer[PanelSprites.Length];
+			RoundValuesPerElement = new int[ElementCount];
 
-			for (int i = 0; i < _panelRenderers.Length; ++i) {
-				_panelRenderers[i] = transform.GetChild(i).GetComponent<SpriteRenderer>();
+			for (int i = 0; i < MaxPanels; ++i) {
+				PanelRenderers[i] = transform.GetChild(i).GetComponent<SpriteRenderer>();
+			}
+
+			string[] elementNames = Enum.GetNames(typeof(Element));
+
+			for (int i = 0; i < elementNames.Length; i++) {
+				PanelSprites[i] = Resources.Load<Sprite>("Sprites/Panel " + elementNames[i]);
 			}
 		}
 

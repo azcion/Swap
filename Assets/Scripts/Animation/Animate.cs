@@ -51,6 +51,7 @@ namespace Assets.Scripts.Animation {
 
 					t.SetEmpty();
 					++TilesPoppedThisRound;
+					++PanelController.RoundValuesPerElement[(int) t.Type];
 
 					FieldGenerator.Instance.StartCoroutine(DelayedPop(delay, t));
 					delay += Duration.SinglePopDelay;

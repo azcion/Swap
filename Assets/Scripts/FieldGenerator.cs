@@ -55,8 +55,9 @@ namespace Assets.Scripts {
 
 			yield return new WaitForSeconds(Duration.Wait);
 			Fill();
-
+			PanelController.AssignRoundValues();
 			Drag.Lock = true;
+			
 			yield return new WaitForSeconds(Duration.SafeWait);
 			Check();
 		}
