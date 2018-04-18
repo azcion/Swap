@@ -20,7 +20,7 @@ namespace Assets.Scripts {
 		public static FieldGenerator Instance;
 
 		private static Tile[,] _tiles;
-		private static List<GameObject> _tilePrefabs;
+		private static GameObject[] _tilePrefabs;
 
 		/// <summary>
 		/// Start a coroutine that finds, removes and replaces matched tiles
@@ -119,7 +119,7 @@ namespace Assets.Scripts {
 						continue;
 					}
 
-					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), oldTile.Transform.parent, true);
+					CreateTile(y, x, Random.Range(1, _tilePrefabs.Length), oldTile.Transform.parent, true);
 					oldTile.Destroy();
 				}
 			}
@@ -155,11 +155,13 @@ namespace Assets.Scripts {
 		[UsedImplicitly]
 		private void OnEnable () {
 			Instance = this;
-			_tilePrefabs = new List<GameObject>();
 			_tiles = new Tile[Height, Width];
 
-			foreach (string element in Enum.GetNames(typeof(Element))) {
-				_tilePrefabs.Add(Resources.Load("Tile " + element) as GameObject);
+			string[] elements = Enum.GetNames(typeof(Element));
+			_tilePrefabs = new GameObject[elements.Length];
+
+			for (int i = 0; i < elements.Length; ++i) {
+				_tilePrefabs[i] = Resources.Load("Tile " + elements[i]) as GameObject;
 			}
 		}
 
@@ -167,7 +169,7 @@ namespace Assets.Scripts {
 		private void Start () {
 			for (int y = 0; y < Height; ++y) {
 				for (int x = 0; x < Width; ++x) {
-					CreateTile(y, x, Random.Range(1, _tilePrefabs.Count), transform);
+					CreateTile(y, x, Random.Range(1, _tilePrefabs.Length), transform);
 				}
 			}
 		}
