@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts.Animation;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -8,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts {
 
-	internal sealed class FieldGenerator : MonoBehaviour {
+	internal sealed class GridController : MonoBehaviour {
 
 		public const int Width = 6;
 		public const int Height = 5;
@@ -17,7 +16,7 @@ namespace Assets.Scripts {
 		public const float InitPosHalf = InitPos / 2f;
 		public const int DropHeight = 1;
 
-		public static FieldGenerator Instance;
+		public static GridController Instance;
 
 		private static Tile[,] _tiles;
 		private static GameObject[] _tilePrefabs;

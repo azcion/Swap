@@ -2,7 +2,7 @@
 
 	internal static class Duration {
 
-		public const float Wait = SinglePopDelay * FieldGenerator.Width * FieldGenerator.Height;
+		public const float Wait = SinglePopDelay * GridController.Width * GridController.Height;
 		public const float SafeWait = Wait + Long;
 
 		#region Animation duration

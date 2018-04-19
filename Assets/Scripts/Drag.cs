@@ -12,10 +12,10 @@ namespace Assets.Scripts {
 			/// <summary> Reduce bounding box size by value on each side </summary>
 			private const float Intolerance = .45f;
 
-			internal const float X0 = FieldGenerator.InitPosHalf + Intolerance;
-			internal const float Y0 = FieldGenerator.InitPosHalf + Intolerance;
-			internal const float X1 = FieldGenerator.InitPosHalf + FieldGenerator.Width - Intolerance;
-			internal const float Y1 = FieldGenerator.InitPosHalf + FieldGenerator.Height - Intolerance;
+			internal const float X0 = GridController.InitPosHalf + Intolerance;
+			internal const float Y0 = GridController.InitPosHalf + Intolerance;
+			internal const float X1 = GridController.InitPosHalf + GridController.Width - Intolerance;
+			internal const float Y1 = GridController.InitPosHalf + GridController.Height - Intolerance;
 
 		}
 
@@ -108,7 +108,7 @@ namespace Assets.Scripts {
 			_parent.position = Interpolate(_parent.position);
 			SetOutputVisibility(false);
 
-			FieldGenerator.Check();
+			GridController.Check();
 		}
 
 		[UsedImplicitly]
@@ -159,12 +159,12 @@ namespace Assets.Scripts {
 			// If diagonal movement was made without registering corner tiles
 			if ((int) _hoverOverPos.x != (int) _initialPos.x && (int) _hoverOverPos.y != (int) _initialPos.y) {
 				// Skipped tile
-				FieldGenerator.Swap(new Vector2(_initialPos.x, _hoverOverPos.y), _initialPos);
+				GridController.Swap(new Vector2(_initialPos.x, _hoverOverPos.y), _initialPos);
 
 				// Tile diagonal to the empty spot
-				FieldGenerator.Swap(_hoverOverPos, new Vector2(_initialPos.x, _hoverOverPos.y));
+				GridController.Swap(_hoverOverPos, new Vector2(_initialPos.x, _hoverOverPos.y));
 			} else {
-				FieldGenerator.Swap(_hoverOverPos, _initialPos);
+				GridController.Swap(_hoverOverPos, _initialPos);
 			}
 
 			_initialPos = _hoverOverPos;

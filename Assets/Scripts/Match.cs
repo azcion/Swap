@@ -8,7 +8,7 @@
 		/// Check the field for matches of 3 or more and mark them for destruction
 		/// </summary>
 		public static Element[,] Check (Tile[,] field) {
-			_toDestroy = new Element[FieldGenerator.Height, FieldGenerator.Width];
+			_toDestroy = new Element[GridController.Height, GridController.Width];
 
 			FindHorizontal(field);
 			FindVertical(field);
@@ -17,17 +17,17 @@
 		}
 
 		private static void FindHorizontal (Tile[,] field) {
-			for (int y = 0; y < FieldGenerator.Height; ++y) {
+			for (int y = 0; y < GridController.Height; ++y) {
 				Element type = field[y, 0].Type;
 				int matches = 0;
 
-				for (int x = 0; x < FieldGenerator.Width; ++x) {
+				for (int x = 0; x < GridController.Width; ++x) {
 					Element e = field[y, x].Type;
 
 					if (e == type) {
 						++matches;
 
-						if (matches > 2 && x == FieldGenerator.Width - 1) {
+						if (matches > 2 && x == GridController.Width - 1) {
 							for (int i = 0; i < matches; ++i) {
 								_toDestroy[y, x - i] = type;
 							}
@@ -47,17 +47,17 @@
 		}
 
 		private static void FindVertical (Tile[,] field) {
-			for (int x = 0; x < FieldGenerator.Width; ++x) {
+			for (int x = 0; x < GridController.Width; ++x) {
 				Element type = field[0, x].Type;
 				int matches = 0;
 
-				for (int y = 0; y < FieldGenerator.Height; ++y) {
+				for (int y = 0; y < GridController.Height; ++y) {
 					Element e = field[y, x].Type;
 
 					if (e == type) {
 						++matches;
 
-						if (matches > 2 && y == FieldGenerator.Height - 1) {
+						if (matches > 2 && y == GridController.Height - 1) {
 							for (int i = 0; i < matches; ++i) {
 								_toDestroy[y - i, x] = type;
 							}

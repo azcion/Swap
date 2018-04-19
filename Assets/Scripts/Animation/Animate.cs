@@ -36,8 +36,8 @@ namespace Assets.Scripts.Animation {
 			TilesPoppedThisRound = 0;
 			float delay = 0;
 
-			for (int y = 0; y < FieldGenerator.Height; ++y) {
-				for (int x = 0; x < FieldGenerator.Width; ++x) {
+			for (int y = 0; y < GridController.Height; ++y) {
+				for (int x = 0; x < GridController.Width; ++x) {
 					if (matched[y, x] == 0) {
 						continue;
 					}
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Animation {
 					++TilesPoppedThisRound;
 					++PanelController.RoundValuesPerElement[(int) t.Type];
 
-					FieldGenerator.Instance.StartCoroutine(DelayedPop(delay, t));
+					GridController.Instance.StartCoroutine(DelayedPop(delay, t));
 					delay += Duration.SinglePopDelay;
 				}
 			}
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Animation {
 		public static void Fill (Tile tile) {
 			int x = tile.X + 1;
 			int y = tile.Y + 1;
-			Vector2 start = new Vector2(x, FieldGenerator.Height + FieldGenerator.DropHeight);
+			Vector2 start = new Vector2(x, GridController.Height + GridController.DropHeight);
 			Vector2 end = new Vector2(x, y);
 
 			Add(new AnimatePosition(tile, start, end, Duration.Long));
