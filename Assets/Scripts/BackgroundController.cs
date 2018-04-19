@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Assets.Scripts {
 
-	internal sealed class GridBackgroundController : MonoBehaviour {
+	public class BackgroundController : MonoBehaviour {
 
 		[UsedImplicitly]
 		private void OnEnable () {
-			transform.localPosition = Z.VGridBackground;
+			transform.localPosition = Z.VBackground;
 		}
 
 	}
