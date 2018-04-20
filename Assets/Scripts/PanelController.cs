@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts {
 
@@ -13,12 +14,10 @@ namespace Assets.Scripts {
 		private static readonly int ElementCount;
 		private static readonly Panel[] Panels;
 		private static readonly Sprite[] PanelSprites;
-		private static readonly SpriteRenderer[] PanelRenderers;
 
 		static PanelController () {
 			ElementCount = Enum.GetValues(typeof(Element)).Length;
 			Panels = new Panel[MaxPanels];
-			PanelRenderers = new SpriteRenderer[MaxPanels];
 			PanelSprites = new Sprite[ElementCount];
 		}
 
@@ -28,6 +27,7 @@ namespace Assets.Scripts {
 		public static void AssignRoundValues () {
 			foreach (Panel panel in Panels) {
 				panel.AddValue(RoundValuesPerElement[(int) panel.Type]);
+				panel.Update();
 			}
 
 			RoundValuesPerElement = new int[ElementCount];
@@ -37,14 +37,14 @@ namespace Assets.Scripts {
 		/// Show correct backgrounds for the panels' corresponding types
 		/// </summary>
 		private static void AssignBackgrounds () {
-			for (int i = 0; i < Panels.Length; ++i) {
-				PanelRenderers[i].sprite = PanelSprites[(int)Panels[i].Type];
+			foreach (Panel panel in Panels) {
+				panel.Renderer.sprite = PanelSprites[(int) panel.Type];
 			}
 		}
 
-		private static void Debug () {
+		private void Debug () {
 			for (int i = 0; i < 5; ++i) {
-				Panels[i] = new Panel((Element) (i + 2), 10);
+				Panels[i] = new Panel(transform.GetChild(i), (Element) (i + 2), 10);
 			}
 
 			AssignBackgrounds();
@@ -65,10 +65,6 @@ namespace Assets.Scripts {
 			Vector3 v = transform.localPosition;
 			transform.localPosition = new Vector3(v.x, v.y, Z.Panel);
 			RoundValuesPerElement = new int[ElementCount];
-
-			for (int i = 0; i < MaxPanels; ++i) {
-				PanelRenderers[i] = transform.GetChild(i).GetComponent<SpriteRenderer>();
-			}
 
 			string[] elementNames = Enum.GetNames(typeof(Element));
 
