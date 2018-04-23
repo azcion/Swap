@@ -21,6 +21,10 @@ namespace Assets.Scripts {
 			PanelSprites = new Sprite[ElementCount];
 		}
 
+		public static Text GetTextObject (int index) {
+			return Panels[index].Text;
+		}
+		
 		/// <summary>
 		/// Add values earned during this round to corresponding panels
 		/// </summary>

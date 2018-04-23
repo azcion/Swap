@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Animation {
 
@@ -35,6 +36,7 @@ namespace Assets.Scripts.Animation {
 		public static void Pop (Tile[,] tiles, Element[,] matched) {
 			TilesPoppedThisRound = 0;
 			float delay = 0;
+			int[] originalPanelValues = PanelController.RoundValuesPerElement.Clone() as int[];
 
 			for (int y = 0; y < GridController.Height; ++y) {
 				for (int x = 0; x < GridController.Width; ++x) {
@@ -56,6 +58,14 @@ namespace Assets.Scripts.Animation {
 					GridController.Instance.StartCoroutine(DelayedPop(delay, t));
 					delay += Duration.SinglePopDelay;
 				}
+			}
+
+			for (int i = 0; i < PanelController.MaxPanels; ++i) {
+				int start = originalPanelValues[i + 2];
+				int end = PanelController.RoundValuesPerElement[i + 2];
+				Text text = PanelController.GetTextObject(i);
+
+				GridController.Instance.StartCoroutine(DelayedPanelValueUpdate(Duration.Wait, text, start, end));
 			}
 
 			TilesPoppedTotal += TilesPoppedThisRound;
@@ -111,6 +121,12 @@ namespace Assets.Scripts.Animation {
 			Add(new AnimateRotation(tile));
 			Add(new AnimateScale(tile));
 			Add(new AnimateOpacity(tile));
+		}
+
+		private static IEnumerator DelayedPanelValueUpdate (float seconds, Text text, int start, int end) {
+			yield return new WaitForSeconds(seconds);
+
+			Add(new AnimateNumber(text, start, end, Duration.Long));
 		}
 
 	}
