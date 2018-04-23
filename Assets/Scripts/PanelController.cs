@@ -7,9 +7,9 @@ namespace Assets.Scripts {
 
 	internal sealed class PanelController : MonoBehaviour {
 
-		public static int[] RoundValuesPerElement;
+		public const int MaxPanels = 5;
 
-		private const int MaxPanels = 5;
+		public static int[] RoundValuesPerElement;
 
 		private static readonly int ElementCount;
 		private static readonly Panel[] Panels;
