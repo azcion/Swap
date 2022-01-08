@@ -2,23 +2,24 @@
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Debug = System.Diagnostics.Debug;
 
-namespace Assets.Scripts {
+internal sealed class CameraController : MonoBehaviour {
 
-	internal sealed class CameraController : MonoBehaviour {
-
-		[UsedImplicitly]
-		private IEnumerator Start () {
-			Screen.SetResolution(504, 896, false);
-
-			while (!SplashScreen.isFinished) {
-				yield return null;
-			}
-
-			Vector3 v = Camera.main.transform.position;
-			Camera.main.transform.position = new Vector3(v.x, v.y, Z.Camera);
+	public static Camera Main;
+	
+	[UsedImplicitly]
+	private IEnumerator Start () {
+		Main = Camera.main;
+		Debug.Assert(Main != null, nameof(Main) + " != null");
+		
+		while (!SplashScreen.isFinished) {
+			yield return null;
 		}
 
+		Transform camTransform = Main.transform;
+		Vector3 v = camTransform.position;
+		camTransform.position = new Vector3(v.x, v.y, Z.Camera);
 	}
 
 }

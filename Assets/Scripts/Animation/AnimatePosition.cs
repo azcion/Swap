@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Animation {
+namespace Animation {
 
 	internal sealed class AnimatePosition : AbstractAnimation, IAnimate {
 
@@ -14,8 +14,8 @@ namespace Assets.Scripts.Animation {
 		}
 
 		public AnimatePosition (Tile tile, Vector2 delta, float duration = Duration.Medium)
-			: this(tile, new Vector2(tile.Transform.position.x, tile.Transform.position.y),
-				new Vector2(tile.Transform.position.x + delta.x, tile.Transform.position.y + delta.y),
+			: this(tile, new Vector2(tile.Transform.localPosition.x, tile.Transform.localPosition.y),
+				new Vector2(tile.Transform.localPosition.x + delta.x, tile.Transform.localPosition.y + delta.y),
 				duration) {
 		}
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Animation {
 
 			float covered = Time.time - StartTime;
 			Fraction = covered / DurationOverride;
-			Tile.Transform.position = new Vector2(
+			Tile.Transform.localPosition = new Vector2(
 				Mathf.SmoothStep(Start.x, End.x, Fraction),
 				Mathf.SmoothStep(Start.y, End.y, Fraction));
 

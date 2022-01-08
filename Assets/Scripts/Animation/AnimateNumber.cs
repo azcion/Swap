@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Animation {
+namespace Animation {
 
 	internal sealed class AnimateNumber : AbstractAnimation, IAnimate {
 

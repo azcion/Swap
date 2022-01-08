@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Animation {
+﻿namespace Animation {
 
 	internal static class Duration {
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Animation {
+namespace Animation {
 
 	internal sealed class AnimateRotation : AbstractAnimation, IAnimate {
 
